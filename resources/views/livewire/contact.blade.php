@@ -17,10 +17,10 @@
                          <a href="tel:{{ str_replace(' ', '', App\Models\Setting::getValue('phone', '905059878900')) }}" class="text-2xl font-medium text-brand-dark hover:text-brand-accent transition-colors">{{ App\Models\Setting::getValue('phone', '+90 505 987 89 00') }}</a>
                     </div>
                     
-                    <div>
+                     <div>
                         <h3 class="text-brand-olive uppercase tracking-[0.2em] text-sm font-semibold mb-3">{{ __('Location') }}</h3>
                          <address class="not-italic text-gray-600 font-light leading-relaxed text-lg">
-                            {{ App\Models\Setting::getValue('address', 'Andifli, Hastane Cd. No:11, 07580 Kaş/Antalya') }}
+                            {{ App\Models\Setting::getValue('address', 'Kalkan, İskele Sk. No:13, 07960 Kaş/Antalya') }}
                         </address>
                     </div>
                     
@@ -39,7 +39,7 @@
             <!-- Map Section -->
             <div class="gsap-fade-in relative h-[500px] lg:h-auto bg-gray-200">
                 <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1591.956627094056!2d29.610111162153966!3d36.19835705663737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14c1d1bc5b476b55%3A0xbf4bd37d9119f4b4!2sPruva%20Restaurant%20Ka%C5%9F!5e0!3m2!1sen!2str!4v1709068478491!5m2!1sen!2str" 
+                    src="{{ App\Models\Setting::getValue('google_maps_link', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1591.956627094056!2d29.610111162153966!3d36.19835705663737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14c1d1bc5b476b55%3A0xbf4bd37d9119f4b4!2sPruva%20Restaurant%20Ka%C5%9F!5e0!3m2!1sen!2str!4v1709068478491!5m2!1sen!2str') }}" 
                     class="absolute inset-0 w-full h-full border-0 grayscale opacity-90 contrast-125 mix-blend-multiply" 
                     allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
                 </iframe>

@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 9.6.0, for macos26.2 (arm64)
+-- MySQL dump 10.13  Distrib 8.4.8, for Linux (aarch64)
 --
--- Host: localhost    Database: pruva_web
+-- Host: localhost    Database: elia_new_era
 -- ------------------------------------------------------
--- Server version	9.6.0
+-- Server version	8.4.8
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,14 +14,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;
-SET @@SESSION.SQL_LOG_BIN= 0;
-
---
--- GTID state at the beginning of the backup 
---
-
-SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '23ce228c-1b29-11f1-8ed1-5f453d643bfd:1-1065';
 
 --
 -- Table structure for table `blog_posts`
@@ -36,8 +28,8 @@ CREATE TABLE `blog_posts` (
   `slug` json NOT NULL,
   `description` json DEFAULT NULL,
   `content` json DEFAULT NULL,
-  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `original_link` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `original_link` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `published_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -64,8 +56,8 @@ DROP TABLE IF EXISTS `cache`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cache` (
-  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `expiration` int NOT NULL,
   PRIMARY KEY (`key`),
   KEY `cache_expiration_index` (`expiration`)
@@ -78,6 +70,7 @@ CREATE TABLE `cache` (
 
 LOCK TABLES `cache` WRITE;
 /*!40000 ALTER TABLE `cache` DISABLE KEYS */;
+INSERT INTO `cache` VALUES ('laravel-cache-usd_to_try_rate_tcmb','d:43.9722;',1772707926);
 /*!40000 ALTER TABLE `cache` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -89,8 +82,8 @@ DROP TABLE IF EXISTS `cache_locks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cache_locks` (
-  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `owner` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `owner` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `expiration` int NOT NULL,
   PRIMARY KEY (`key`),
   KEY `cache_locks_expiration_index` (`expiration`)
@@ -118,7 +111,7 @@ CREATE TABLE `categories` (
   `name` json NOT NULL,
   `slug` json DEFAULT NULL,
   `description` json DEFAULT NULL,
-  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `order_column` int NOT NULL DEFAULT '0',
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -149,11 +142,11 @@ DROP TABLE IF EXISTS `failed_jobs`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `failed_jobs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
@@ -178,9 +171,9 @@ DROP TABLE IF EXISTS `feedback`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `feedback` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contact` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contact` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `is_read` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -208,7 +201,7 @@ DROP TABLE IF EXISTS `gallery_images`;
 CREATE TABLE `gallery_images` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `title` json DEFAULT NULL,
-  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `alt_text` json DEFAULT NULL,
   `order_column` int NOT NULL DEFAULT '0',
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
@@ -236,13 +229,13 @@ DROP TABLE IF EXISTS `job_batches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `job_batches` (
-  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `total_jobs` int NOT NULL,
   `pending_jobs` int NOT NULL,
   `failed_jobs` int NOT NULL,
-  `failed_job_ids` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `options` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `failed_job_ids` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `options` mediumtext COLLATE utf8mb4_unicode_ci,
   `cancelled_at` int DEFAULT NULL,
   `created_at` int NOT NULL,
   `finished_at` int DEFAULT NULL,
@@ -268,8 +261,8 @@ DROP TABLE IF EXISTS `jobs`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `jobs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `queue` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `attempts` tinyint unsigned NOT NULL,
   `reserved_at` int unsigned DEFAULT NULL,
   `available_at` int unsigned NOT NULL,
@@ -305,7 +298,7 @@ CREATE TABLE `menu_items` (
   `is_vegan` tinyint(1) NOT NULL DEFAULT '0',
   `likes_count` bigint unsigned NOT NULL DEFAULT '0',
   `allergen_info` json DEFAULT NULL,
-  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_featured` tinyint(1) NOT NULL DEFAULT '0',
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `order_column` int NOT NULL DEFAULT '0',
@@ -336,7 +329,7 @@ DROP TABLE IF EXISTS `migrations`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `migrations` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -360,8 +353,8 @@ DROP TABLE IF EXISTS `password_reset_tokens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `password_reset_tokens` (
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -384,11 +377,11 @@ DROP TABLE IF EXISTS `sessions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sessions` (
-  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` bigint unsigned DEFAULT NULL,
-  `ip_address` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `user_agent` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` text COLLATE utf8mb4_unicode_ci,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `last_activity` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `sessions_user_id_index` (`user_id`),
@@ -402,7 +395,7 @@ CREATE TABLE `sessions` (
 
 LOCK TABLES `sessions` WRITE;
 /*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
-INSERT INTO `sessions` VALUES ('eofJ8m8aPFbZX9eHOXT78aoaYd9dNrvVs13n0yJ8',1,'127.0.0.1','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36','YTo4OntzOjY6Il90b2tlbiI7czo0MDoiS1ZFNE5EVjM1eGJKclBVVFQ0eVh3RHV6WVBvekxHclBROXFpd1BhdCI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjI6e3M6MzoidXJsIjtzOjMyOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvdHIvY29udGFjdCI7czo1OiJyb3V0ZSI7czo3OiJjb250YWN0Ijt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTtzOjE3OiJwYXNzd29yZF9oYXNoX3dlYiI7czo2NDoiODZmNGMwYWQ5ODY1YzdmYzIwYjMyZGJjODJhNmJmNWQ5Y2QyMTdkZTdlMTY4NjgzOGE0ZTczYWU1YzQ5M2VlMSI7czo4OiJmaWxhbWVudCI7YTowOnt9czo2OiJsb2NhbGUiO3M6MjoidHIiO30=',1773611895);
+INSERT INTO `sessions` VALUES ('iB7e2BRFWwwYs19OUjF0Za8BfcBFlpPJ0nf0pTEa',NULL,'185.98.252.10','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.2 Safari/605.1.15','YTo0OntzOjY6Il90b2tlbiI7czo0MDoiY1gybGUxRXhxNjZhZWZGV25EU0puN3ZYcnEya1NPeUdpYWxETkEyYiI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czozODoiaHR0cDovL2xvY2FsaG9zdC9hZG1pbi9zZXR0aW5ncy81L2VkaXQiO31zOjk6Il9wcmV2aW91cyI7YToyOntzOjM6InVybCI7czoyODoiaHR0cDovL2xvY2FsaG9zdC9hZG1pbi9sb2dpbiI7czo1OiJyb3V0ZSI7czoyNToiZmlsYW1lbnQuYWRtaW4uYXV0aC5sb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=',1772665843),('qsi8yJ2Le3G2lUlBFAyVUNaTqNFfujH6TCS6C19C',1,'185.98.252.10','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36','YTo2OntzOjY6Il90b2tlbiI7czo0MDoiZjB4WTA1bExDd1dMVXZjZzNGVUczTlJNQVNVM3NTYjlNZlQ3VjJnMyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDI6Imh0dHA6Ly9sb2NhbGhvc3QvYWRtaW4vbWFuYWdlLXRyYW5zbGF0aW9ucyI7czo1OiJyb3V0ZSI7czo0MDoiZmlsYW1lbnQuYWRtaW4ucGFnZXMubWFuYWdlLXRyYW5zbGF0aW9ucyI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7czoxNzoicGFzc3dvcmRfaGFzaF93ZWIiO3M6NjQ6ImQ4MTFmNzI2MjNkYjg5OThlM2Q2YWY4ZmZmZTUwM2U0MjY5ZWNhZWYwMWVjNTU3ZjBlNzQ1ZWRjZGRiYTE2OGYiO3M6NjoibG9jYWxlIjtzOjI6InRyIjt9',1772665906);
 /*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -415,15 +408,15 @@ DROP TABLE IF EXISTS `settings`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `settings` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'text',
-  `group` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'general',
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` text COLLATE utf8mb4_unicode_ci,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'text',
+  `group` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'general',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `settings_key_unique` (`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -432,7 +425,7 @@ CREATE TABLE `settings` (
 
 LOCK TABLES `settings` WRITE;
 /*!40000 ALTER TABLE `settings` DISABLE KEYS */;
-INSERT INTO `settings` VALUES (3,'brand_olive','{\"en\":\"#1f3c61\",\"tr\":\"#1f3c61\"}','color','branding','2026-03-04 20:14:51','2026-03-15 18:50:37'),(4,'brand_light','{\"en\":\"#e6f5f4\",\"tr\":\"#e6f5f4\"}','color','branding','2026-03-04 20:14:51','2026-03-15 18:50:47'),(5,'brand_dark','{\"en\":\"#28272e\",\"tr\":\"#28272e\"}','color','branding','2026-03-04 20:14:51','2026-03-15 18:50:57'),(9,'google_maps_link','{\"en\":\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3216.946349444833!2d29.410710426001202!3d36.26508144768109!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14c02d197fb33465%3A0x7279d31cfeab1ade!2sPruva%20Meyhane!5e0!3m2!1str!2str!4v1773611537797!5m2!1str!2str\",\"tr\":\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3216.946349444833!2d29.410710426001202!3d36.26508144768109!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14c02d197fb33465%3A0x7279d31cfeab1ade!2sPruva%20Meyhane!5e0!3m2!1str!2str!4v1773611537797!5m2!1str!2str\"}','text','contact','2026-03-04 20:14:51','2026-03-15 18:58:09'),(11,'meta_title','{\"en\":\"Elia Restaurant | Kaş Antalya\",\"tr\":\"Elia Restaurant | Kaş Antalya\"}','text','seo','2026-03-04 20:14:51','2026-03-04 20:24:27'),(12,'meta_description','{\"en\":\"Unforgettable taste experience in the unique view of Kaş.\",\"tr\":\"Kaş\'ın eşsiz manzarasında unutulmaz bir lezzet deneyimi.\"}','text','seo','2026-03-04 20:14:51','2026-03-04 20:24:27'),(13,'favicon','{\"tr\":\"settings/01KKSQK456J40FEJTNE3KX5PKD.png\",\"en\":\"settings/01KKSQK456J40FEJTNE3KX5PKD.png\"}','image','branding','2026-03-04 20:30:56','2026-03-15 18:49:16'),(14,'site_name','{\"tr\": \"Pruva Meyhane\", \"en\": \"Pruva Meyhane\"}','text','general',NULL,NULL),(15,'title','{\"tr\": \"Pruva Meyhane\", \"en\": \"Pruva Meyhane\"}','text','general',NULL,NULL),(16,'address','{\"tr\": \"Kalkan, İskele Sk. No:13, 07960 Kaş/Antalya\", \"en\": \"Kalkan, İskele Sk. No:13, 07960 Kaş/Antalya\"}','text','general',NULL,NULL),(17,'phone','{\"tr\":\"+90 535 458 55 44\",\"en\":\"+90 535 458 55 44\"}','text','general',NULL,'2026-03-15 18:49:30'),(18,'whatsapp','{\"tr\":\"+90 535 458 55 44\",\"en\":\"+90 535 458 55 44\"}','text','general',NULL,'2026-03-15 18:49:39'),(19,'email','{\"tr\":\"info@pruvakalkan.com\",\"en\":\"info@pruvakalkan.com\"}','text','general',NULL,'2026-03-15 18:49:48'),(20,'logo','{\"tr\":\"settings/01KKSQMM3TQMD31DBANSEPN25F.png\",\"en\":\"settings/01KKSQMM3TQMD31DBANSEPN25F.png\"}','image','general',NULL,'2026-03-15 18:50:05');
+INSERT INTO `settings` VALUES (1,'site_name','{\"en\":\"Elia Restaurant\",\"tr\":\"Elia Restaurant\"}','text','branding','2026-03-04 20:14:51','2026-03-04 20:24:27'),(2,'logo','{\"tr\":\"settings/01KJXBDX363BKB05ZF4149YRB9.png\",\"en\":\"settings/01KJXBDX363BKB05ZF4149YRB9.png\"}','image','branding','2026-03-04 20:14:51','2026-03-04 21:17:58'),(3,'brand_olive','{\"en\":\"#5c6448\",\"tr\":\"#5c6448\"}','color','branding','2026-03-04 20:14:51','2026-03-04 20:24:27'),(4,'brand_light','{\"en\":\"#f5f1e6\",\"tr\":\"#f5f1e6\"}','color','branding','2026-03-04 20:14:51','2026-03-04 20:24:27'),(5,'brand_dark','{\"en\":\"#ff0000\",\"tr\":\"#2c2e27\"}','color','branding','2026-03-04 20:14:51','2026-03-04 20:55:39'),(6,'phone','{\"en\":\"+90 505 987 89 00\",\"tr\":\"+90 505 987 89 00\"}','text','contact','2026-03-04 20:14:51','2026-03-04 20:24:27'),(7,'whatsapp','{\"en\":\"905059878900\",\"tr\":\"905059878900\"}','text','contact','2026-03-04 20:14:51','2026-03-04 20:24:27'),(8,'address','{\"en\":\"Andifli, Hastane Cd. No:11, 07580 Kaş/Antalya\",\"tr\":\"Andifli, Hastane Cd. No:11, 07580 Kaş/Antalya\"}','text','contact','2026-03-04 20:14:51','2026-03-04 20:24:27'),(9,'google_maps_link','{\"en\":\"https://maps.app.goo.gl/xxx\",\"tr\":\"https://maps.app.goo.gl/xxx\"}','text','contact','2026-03-04 20:14:51','2026-03-04 20:24:27'),(10,'email','{\"en\":\"info@eliakas.com\",\"tr\":\"info@eliakas.com\"}','text','contact','2026-03-04 20:14:51','2026-03-04 20:24:27'),(11,'meta_title','{\"en\":\"Elia Restaurant | Kaş Antalya\",\"tr\":\"Elia Restaurant | Kaş Antalya\"}','text','seo','2026-03-04 20:14:51','2026-03-04 20:24:27'),(12,'meta_description','{\"en\":\"Unforgettable taste experience in the unique view of Kaş.\",\"tr\":\"Kaş\'ın eşsiz manzarasında unutulmaz bir lezzet deneyimi.\"}','text','seo','2026-03-04 20:14:51','2026-03-04 20:24:27'),(13,'favicon','{\"tr\":\"settings/01KJXBG82V00MGDPXA37P8G7KP.jpg\",\"en\":\"settings/01KJXBG82V00MGDPXA37P8G7KP.jpg\"}','image','branding','2026-03-04 20:30:56','2026-03-04 21:19:15');
 /*!40000 ALTER TABLE `settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -445,11 +438,11 @@ DROP TABLE IF EXISTS `users`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -463,10 +456,9 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Admin','admin@pruva.com',NULL,'$2y$12$QGtkUTSIfJu2u9JBFJSnwOfCG565OJh4G7e0W43q5fEgpWpT4XxWi','heEUbqSS6fckP85SKV9RjjkyXSu6H7Nd9MwHFYYNWqNd3QaUh6CgY82WkI9g','2026-02-28 14:57:59','2026-03-15 18:44:12');
+INSERT INTO `users` VALUES (1,'Admin','info@eliakas.com.tr',NULL,'$2y$12$MIQVdxFDd9wnu9gZCqTog.ORhzpw6GD2BJMJAX5nWZy26THYLjyGW','heEUbqSS6fckP85SKV9RjjkyXSu6H7Nd9MwHFYYNWqNd3QaUh6CgY82WkI9g','2026-02-28 14:57:59','2026-03-04 20:16:44');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
-SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -477,4 +469,4 @@ SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-03-16  0:58:28
+-- Dump completed on 2026-03-04 23:13:36
