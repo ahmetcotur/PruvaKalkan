@@ -19,8 +19,8 @@ class BlogIndex extends Component
         return view('livewire.blog-index', [
             'posts' => $posts
         ])->layout('components.layouts.app', [
-            'title' => __('Journal & Stories') . ' | Pruva Restaurant Kaş',
-            'description' => __('Discover the latest news, recipes, and stories from the heart of the Mediterranean.')
+            'title' => \App\Models\Setting::getValue('blog_meta_title', __('Journal & Stories') . ' | Pruva Restaurant Kaş'),
+            'description' => \App\Models\Setting::getValue('blog_meta_description', __('Discover the latest news, recipes, and stories from the heart of the Mediterranean.'))
         ]);
     }
 }

@@ -12,6 +12,9 @@ class Gallery extends Component
         
         return view('livewire.gallery', [
             'images' => $images
-        ])->title(__('Gallery') . ' - Pruva Restaurant Kaş');
+        ])->layout('components.layouts.app', [
+            'title' => \App\Models\Setting::getValue('gallery_meta_title', __('Gallery') . ' - Pruva Restaurant Kaş'),
+            'description' => \App\Models\Setting::getValue('gallery_meta_description', __('Snapshots, flavors, and views from Pruva Restaurant.'))
+        ]);
     }
 }

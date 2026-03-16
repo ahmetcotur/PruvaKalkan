@@ -51,12 +51,15 @@ class SettingResource extends Resource
                                         'contact' => 'İletişim',
                                         'branding' => 'Marka',
                                         'seo' => 'SEO',
+                                        'homepage' => 'Anasayfa',
+                                        'our_story' => 'Hakkımızda',
+                                        'social' => 'Sosyal Medya',
                                     ])
                                     ->required(),
                             ]),
                         
                         Forms\Components\Tabs::make('Çeviriler')
-                            ->visible(fn (Forms\Get $get) => $get('group') === 'seo' || in_array($get('key'), ['site_name', 'address']))
+                            ->visible(fn (Forms\Get $get) => $get('group') === 'seo' || $get('group') === 'homepage' || $get('group') === 'our_story' || $get('group') === 'social' || in_array($get('key'), ['site_name', 'address']))
                             ->tabs([
                                 Forms\Components\Tabs\Tab::make('Türkçe')
                                     ->schema([
@@ -71,12 +74,14 @@ class SettingResource extends Resource
                                         Forms\Components\FileUpload::make('value_image_tr')
                                             ->label('Görsel Değeri (TR)')
                                             ->image()
+                                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'])
                                             ->directory('settings')
                                             ->visible(fn (Forms\Get $get) => $get('type') === 'image')
                                             ->columnSpanFull(),
                                         Forms\Components\FileUpload::make('value_images_tr')
                                             ->label('Çoklu Görsel Galerisi (TR)')
                                             ->image()
+                                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'])
                                             ->multiple()
                                             ->reorderable()
                                             ->directory('settings')
@@ -104,12 +109,14 @@ class SettingResource extends Resource
                                         Forms\Components\FileUpload::make('value_image_en')
                                             ->label('Görsel Değeri (EN)')
                                             ->image()
+                                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'])
                                             ->directory('settings')
                                             ->visible(fn (Forms\Get $get) => $get('type') === 'image')
                                             ->columnSpanFull(),
                                         Forms\Components\FileUpload::make('value_images_en')
                                             ->label('Çoklu Görsel Galerisi (EN)')
                                             ->image()
+                                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'])
                                             ->multiple()
                                             ->reorderable()
                                             ->directory('settings')
@@ -141,12 +148,14 @@ class SettingResource extends Resource
                                 Forms\Components\FileUpload::make('value_image_global')
                                     ->label('Görsel Değeri')
                                     ->image()
+                                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'])
                                     ->directory('settings')
                                     ->visible(fn (Forms\Get $get) => $get('type') === 'image')
                                     ->columnSpanFull(),
                                 Forms\Components\FileUpload::make('value_images_global')
                                     ->label('Çoklu Görsel Galerisi')
                                     ->image()
+                                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'])
                                     ->multiple()
                                     ->reorderable()
                                     ->directory('settings')
@@ -269,7 +278,8 @@ class SettingResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSettings::route('/'),
+            'index' => Pages\ManageSettings::route('/'),
+            'list' => Pages\ListSettings::route('/list'),
             'create' => Pages\CreateSetting::route('/create'),
             'edit' => Pages\EditSetting::route('/{record}/edit'),
         ];

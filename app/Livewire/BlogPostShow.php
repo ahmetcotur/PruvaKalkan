@@ -37,7 +37,7 @@ class BlogPostShow extends Component
             'title' => $this->post->title,
             'description' => $this->post->description,
         ])->layout('components.layouts.app', [
-            'title' => $this->post->title . ' - Pruva Restaurant Kaş',
+            'title' => $this->post->title . ' - ' . \App\Models\Setting::getValue('site_name', 'Pruva Restaurant Kaş'),
             'description' => substr(strip_tags($this->post->description), 0, 160)
         ]);
     }

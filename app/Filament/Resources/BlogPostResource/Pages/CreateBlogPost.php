@@ -17,5 +17,14 @@ class CreateBlogPost extends CreateRecord
             Actions\LocaleSwitcher::make(),
         ];
     }
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        if (!empty($data['image'])) {
+            $data['image'] = \App\Services\ImageService::process($data['image'], 'blog');
+        }
+
+        return $data;
+    }
+
     protected static string $resource = BlogPostResource::class;
 }

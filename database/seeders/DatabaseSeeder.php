@@ -15,11 +15,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->call([
+            SettingSeeder::class,
+            SocialSettingsSeeder::class,
+            OurStorySettingsSeeder::class,
+            GallerySeeder::class,
+            MenuSeeder::class,
+            BeverageMenuSeeder::class,
+            LunchMenuSeeder::class,
+            DinnerMenuSeeder::class,
+            BlogPostsSeeder::class,
+        ]);
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Admin User',
+            'email' => 'admin@admin.com',
+            'password' => bcrypt('password'), // Or keep current logic if needed, but adding a default admin is standard
         ]);
     }
 }

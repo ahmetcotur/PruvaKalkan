@@ -115,8 +115,14 @@ class Menu extends Component
             }
         }
         
+        // Description for menu
+        $pageDescription = \App\Models\Setting::getValue('menu_meta_description', __('The most exclusive flavors of Mediterranean cuisine, fresh seafood and appetizers.'));
+
         return view('livewire.menu', [
             'categories' => $categories
-        ])->title($pageTitle . ' - Pruva Restaurant Kaş');
+        ])->layout('components.layouts.app', [
+            'title' => $this->activeCategory ? ($pageTitle . ' - Pruva Restaurant Kaş') : \App\Models\Setting::getValue('menu_meta_title', __('Menu') . ' - Pruva Restaurant Kaş'),
+            'description' => $pageDescription
+        ]);
     }
 }

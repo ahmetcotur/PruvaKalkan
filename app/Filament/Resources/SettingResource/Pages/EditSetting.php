@@ -13,7 +13,7 @@ class EditSetting extends EditRecord
     {
         $translations = $this->record->getTranslations('value');
         $type = $data['type'];
-        $isTranslatable = $data['group'] === 'seo' || in_array($data['key'], ['site_name', 'address']);
+        $isTranslatable = $data['group'] === 'seo' || $data['group'] === 'homepage' || in_array($data['key'], ['site_name', 'address']);
         
         if ($isTranslatable) {
             $data['value_tr'] = $translations['tr'] ?? '';
@@ -45,21 +45,31 @@ class EditSetting extends EditRecord
     protected function mutateFormDataBeforeSave(array $data): array
     {
         $type = $this->record->type;
-        $isTranslatable = $this->record->group === 'seo' || in_array($this->record->key, ['site_name', 'address']);
+        $isTranslatable = $this->record->group === 'seo' || $this->record->group === 'homepage' || in_array($this->record->key, ['site_name', 'address']);
         
         if ($isTranslatable) {
+            $oldTranslations = $this->record->getTranslations('value');
+            
             $trValue = match($type) {
                 'color' => $data['value_color_tr'] ?? '',
-                'image' => $data['value_image_tr'] ?? '',
-                'images' => $data['value_images_tr'] ?? [],
+                'image' => (!empty($data['value_image_tr']) && $data['value_image_tr'] !== ($oldTranslations['tr'] ?? '')) 
+                    ? \App\Services\ImageService::process($data['value_image_tr'], 'settings') 
+                    : ($data['value_image_tr'] ?? ''),
+                'images' => (!empty($data['value_images_tr'])) 
+                    ? \App\Services\ImageService::process($data['value_images_tr'], 'settings') 
+                    : ($data['value_images_tr'] ?? []),
                 'boolean' => $data['value_boolean_tr'] ?? '',
                 default => $data['value_tr'] ?? '',
             };
 
             $enValue = match($type) {
                 'color' => $data['value_color_en'] ?? '',
-                'image' => $data['value_image_en'] ?? '',
-                'images' => $data['value_images_en'] ?? [],
+                'image' => (!empty($data['value_image_en']) && $data['value_image_en'] !== ($oldTranslations['en'] ?? '')) 
+                    ? \App\Services\ImageService::process($data['value_image_en'], 'settings') 
+                    : ($data['value_image_en'] ?? ''),
+                'images' => (!empty($data['value_images_en'])) 
+                    ? \App\Services\ImageService::process($data['value_images_en'], 'settings') 
+                    : ($data['value_images_en'] ?? []),
                 'boolean' => $data['value_boolean_en'] ?? '',
                 default => $data['value_en'] ?? '',
             };
@@ -71,8 +81,12 @@ class EditSetting extends EditRecord
         } else {
             $globalVal = match($type) {
                 'color' => $data['value_color_global'] ?? '',
-                'image' => $data['value_image_global'] ?? '',
-                'images' => $data['value_images_global'] ?? [],
+                'image' => (!empty($data['value_image_global']) && $data['value_image_global'] !== ($this->record->getTranslation('value', 'tr'))) 
+                    ? \App\Services\ImageService::process($data['value_image_global'], 'settings') 
+                    : ($data['value_image_global'] ?? ''),
+                'images' => (!empty($data['value_images_global'])) 
+                    ? \App\Services\ImageService::process($data['value_images_global'], 'settings') 
+                    : ($data['value_images_global'] ?? []),
                 'boolean' => $data['value_boolean_global'] ?? '',
                 default => $data['value_global'] ?? '',
             };

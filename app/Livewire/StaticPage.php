@@ -16,6 +16,8 @@ class StaticPage extends Component
     public function render()
     {
         $title = $this->slug === 'privacy-policy' ? __('Privacy Policy') : __('Terms of Service');
-        return view('livewire.static-page')->layout('components.layouts.app', ['title' => $title . ' - Pruva Restaurant Kaş']);
+        return view('livewire.static-page')->layout('components.layouts.app', [
+            'title' => $title . ' - ' . \App\Models\Setting::getValue('site_name', 'Pruva Restaurant Kaş')
+        ]);
     }
 }

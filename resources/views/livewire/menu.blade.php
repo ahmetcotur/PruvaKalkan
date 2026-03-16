@@ -58,21 +58,25 @@
                             <a href="{{ route('menu', ['category' => $catSlug]) }}" wire:navigate
                                class="gsap-fade-in group w-full block relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 min-h-[160px] md:min-h-[200px]">
                                 @php
+                                    $favicon = \App\Models\Setting::getValue('favicon');
+                                    $faviconUrl = $favicon ? (str_starts_with($favicon, 'http') ? $favicon : \Illuminate\Support\Facades\Storage::url($favicon)) : null;
+
                                     // 1. First choice: Use the category's uploaded image
                                     if ($category->image) {
                                         $catImgUrl = str_starts_with($category->image, 'http') ? $category->image : \Illuminate\Support\Facades\Storage::url($category->image);
+                                        $catImageHtml = "<img src=\"{$catImgUrl}\" class=\"absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700\" alt=\"{$category->name}\">";
                                     } else {
-                                        // 2. Fallback to Setting if no custom image is uploaded
-                                        $catImgUrl = \App\Models\Setting::getValue('menu_snacks_image', asset('storage/gallery/029A0982.webp'));
-                                        if(str_contains(strtolower($category->name), 'food') || str_contains(strtolower($category->name), 'main') || str_contains(strtolower($category->name), 'yemek') || str_contains(strtolower($category->name), 'kahvaltı')) {
-                                            $catImgUrl = \App\Models\Setting::getValue('menu_restaurant_image', asset('storage/gallery/029A0989.webp'));
-                                        }
-                                        if(str_contains(strtolower($category->name), 'drink') || str_contains(strtolower($category->name), 'icecek') || str_contains(strtolower($category->name), 'içecek') || str_contains(strtolower($category->name), 'şarap')) {
-                                            $catImgUrl = \App\Models\Setting::getValue('menu_drinks_image', asset('storage/gallery/029A5151.webp'));
+                                        // 2. Fallback to Favicon if no custom image is uploaded
+                                        if ($faviconUrl) {
+                                            $catImageHtml = "<div class=\"absolute inset-0 transition-all duration-1000 bg-white/5\">
+                                                                <img src=\"{$faviconUrl}\" class=\"w-full h-full object-cover opacity-[0.07] filter grayscale group-hover:opacity-[0.12] group-hover:scale-110 transition-all duration-1000\" alt=\"{$category->name}\">
+                                                            </div>";
+                                        } else {
+                                            $catImageHtml = "<div class=\"absolute inset-0 bg-brand-olive/5 transition-all duration-700\"></div>";
                                         }
                                     }
                                 @endphp
-                                <img src="{{ $catImgUrl }}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="{{ $category->name }}">
+                                {!! $catImageHtml !!}
                                 <div class="absolute inset-0 bg-brand-dark/40 group-hover:bg-brand-dark/20 transition-colors duration-500"></div>
                                 <div class="absolute inset-0 flex items-center justify-center p-4">
                                     <h4 class="text-2xl md:text-3xl font-bold text-white tracking-wide drop-shadow-md">{{ $category->name }}</h4>
@@ -164,11 +168,23 @@
                                            onclick="event.preventDefault(); smoothScrollTo('subcat-{{ $subcatSlug }}')"
                                            class="subcat-pill group block relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 aspect-[4/3]">
                                             @php
-                                                $placeholders = ['029A0982.jpg', '029A0973.jpg', '029A0916.jpg', '029A5151.jpg', '029A1008.jpg'];
-                                                $randomPh = current(\Illuminate\Support\Arr::random($placeholders, 1));
-                                                $bgImg = $subcat->image ? Storage::url($subcat->image) : asset('images/gallery/' . $randomPh);
+                                                $favicon = \App\Models\Setting::getValue('favicon');
+                                                $faviconUrl = $favicon ? (str_starts_with($favicon, 'http') ? $favicon : \Illuminate\Support\Facades\Storage::url($favicon)) : null;
+
+                                                if ($subcat->image) {
+                                                    $subImgUrl = \Illuminate\Support\Facades\Storage::url($subcat->image);
+                                                    $subImageHtml = "<img src=\"{$subImgUrl}\" class=\"absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 blur-[0.5px] group-hover:blur-0\" alt=\"{$subcat->name}\">";
+                                                } else {
+                                                    if ($faviconUrl) {
+                                                        $subImageHtml = "<div class=\"absolute inset-0 bg-white/5\">
+                                                                            <img src=\"{$faviconUrl}\" class=\"w-full h-full object-cover opacity-[0.05] filter grayscale group-hover:opacity-[0.1] group-hover:scale-110 transition-all duration-1000\" alt=\"{$subcat->name}\">
+                                                                        </div>";
+                                                    } else {
+                                                        $subImageHtml = "<div class=\"absolute inset-0 bg-brand-olive/5\"></div>";
+                                                    }
+                                                }
                                             @endphp
-                                            <img src="{{ $bgImg }}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 blur-[0.5px] group-hover:blur-0" alt="{{ $subcat->name }}">
+                                            {!! $subImageHtml !!}
                                             <div class="absolute inset-0 bg-brand-dark/40 group-hover:bg-brand-dark/20 transition-colors duration-500"></div>
                                             <div class="absolute inset-0 flex items-center justify-center p-3">
                                                 <h4 class="text-sm lg:text-base font-bold text-white tracking-[0.15em] uppercase text-center drop-shadow-lg">{{ $subcat->name }}</h4>
@@ -180,89 +196,29 @@
                         @endif
                         
                         @php
-                            /**
-                             * Keyword-to-Unsplash mapping for relevant stock images
-                             */
-                            $stockImageMap = [
-                                'octopus'   => 'https://images.unsplash.com/photo-1565680018093-ebb6e301c6e0?w=600&auto=format&fit=crop&q=80',
-                                'shrimp'    => 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=600&auto=format&fit=crop&q=80',
-                                'calamari'  => 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=600&auto=format&fit=crop&q=80',
-                                'salmon'    => 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&auto=format&fit=crop&q=80',
-                                'sea bass'  => 'https://images.unsplash.com/photo-1534604973900-c43ab4c2e0ab?w=600&auto=format&fit=crop&q=80',
-                                'sea bream' => 'https://images.unsplash.com/photo-1510130387422-82bed34b37e9?w=600&auto=format&fit=crop&q=80',
-                                'fish'      => 'https://images.unsplash.com/photo-1534604973900-c43ab4c2e0ab?w=600&auto=format&fit=crop&q=80',
-                                'beef'      => 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600&auto=format&fit=crop&q=80',
-                                'lamb'      => 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=600&auto=format&fit=crop&q=80',
-                                'chicken'   => 'https://images.unsplash.com/photo-1598103442097-8b74df4b7e1b?w=600&auto=format&fit=crop&q=80',
-                                'meatball'  => 'https://images.unsplash.com/photo-1529042410759-befb1204b468?w=600&auto=format&fit=crop&q=80',
-                                'steak'     => 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600&auto=format&fit=crop&q=80',
-                                'chops'     => 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=600&auto=format&fit=crop&q=80',
-                                'liver'     => 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&auto=format&fit=crop&q=80',
-                                'roast'     => 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600&auto=format&fit=crop&q=80',
-                                'meze'      => 'https://images.unsplash.com/photo-1541014741259-de529411b96a?w=600&auto=format&fit=crop&q=80',
-                                'mushroom'  => 'https://images.unsplash.com/photo-1504545102780-26774c1bb073?w=600&auto=format&fit=crop&q=80',
-                                'yogurt'    => 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&auto=format&fit=crop&q=80',
-                                'olive'     => 'https://images.unsplash.com/photo-1541014741259-de529411b96a?w=600&auto=format&fit=crop&q=80',
-                                'seafood'   => 'https://images.unsplash.com/photo-1565680018093-ebb6e301c6e0?w=600&auto=format&fit=crop&q=80',
-                                'salad'     => 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&auto=format&fit=crop&q=80',
-                                'arugula'   => 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&auto=format&fit=crop&q=80',
-                                'avocado'   => 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&auto=format&fit=crop&q=80',
-                                'greek'     => 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&auto=format&fit=crop&q=80',
-                                'shepherd'  => 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&auto=format&fit=crop&q=80',
-                                'ravioli'   => 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=600&auto=format&fit=crop&q=80',
-                                'pasta'     => 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=600&auto=format&fit=crop&q=80',
-                                'hamburger' => 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=80',
-                                'burger'    => 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=80',
-                                'breakfast' => 'https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=600&auto=format&fit=crop&q=80',
-                                'halva'     => 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&auto=format&fit=crop&q=80',
-                                'dessert'   => 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&auto=format&fit=crop&q=80',
-                                'fig'       => 'https://images.unsplash.com/photo-1488477304112-4944851de03d?w=600&auto=format&fit=crop&q=80',
-                                'ice cream' => 'https://images.unsplash.com/photo-1488477304112-4944851de03d?w=600&auto=format&fit=crop&q=80',
-                                'fruit'     => 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=600&auto=format&fit=crop&q=80',
-                            ];
-
-                            $fallbackImages = [
-                                'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&auto=format&fit=crop&q=80',
-                                'https://images.unsplash.com/photo-1476224484581-5d996195fd2e?w=600&auto=format&fit=crop&q=80',
-                                'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=600&auto=format&fit=crop&q=80',
-                                'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&auto=format&fit=crop&q=80',
-                            ];
-
-                            $renderItemCard = function($item) use ($stockImageMap, $fallbackImages) {
+                            $renderItemCard = function($item) {
                                 $hasDescription = !empty(strip_tags((string)$item->description));
-                                $imageUrl = $item->image ? Storage::url($item->image) : null;
+                                $imageUrl = $item->getImageUrl();
+                                $srcset = $item->getImageUrl('s') . " 400w, " . $item->getImageUrl('m') . " 800w";
                                 
-                                // Smart keyword-matched stock image for non-drink items
-                                if (!$imageUrl) {
-                                    $catName = strtolower($item->category->name ?? '');
-                                    $isDrink = str_contains($catName, 'drink') || str_contains($catName, 'wine') || str_contains($catName, 'raki') || str_contains($catName, 'beverage');
-                                    
-                                    if (!$isDrink) {
-                                        $itemNameLower = strtolower($item->name);
-                                        $matched = false;
-                                        foreach ($stockImageMap as $keyword => $url) {
-                                            if (str_contains($itemNameLower, $keyword)) {
-                                                $imageUrl = $url;
-                                                $matched = true;
-                                                break;
-                                            }
-                                        }
-                                        if (!$matched) {
-                                            $imageUrl = $fallbackImages[$item->id % count($fallbackImages)];
-                                        }
-                                    }
-                                }
 
                                 $name = e($item->name);
                                 $formattedPriceHtml = $this->formatPrice($item->price);
                                 $description = $hasDescription ? e($item->description) : '';
                                 
                                 // Image & Modal Trigger
+                                $favicon = \App\Models\Setting::getValue('favicon');
+                                $faviconUrl = $favicon ? (str_starts_with($favicon, 'http') ? $favicon : \Illuminate\Support\Facades\Storage::url($favicon)) : null;
+
                                 $imageHtml = $imageUrl 
-                                    ? "<img src=\"{$imageUrl}\" alt=\"{$name}\" loading=\"lazy\" style=\"width:100%;height:100%;object-fit:cover;transition:transform 0.7s ease;cursor:pointer;\" @click=\"isImageModalOpen = true; modalImageSrc = '{$imageUrl}'; modalImageAlt = '{$name}'\">"
-                                    : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg, #f5f0e6 0%, #ebe5d6 100%);">
-                                        <svg style="width:28px;height:28px;opacity:0.18;color:#5c6448;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.8" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.247 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                                       </div>';
+                                    ? "<img src=\"{$imageUrl}\" srcset=\"{$srcset}\" sizes=\"(max-width: 640px) 400px, 800px\" alt=\"{$name}\" loading=\"lazy\" style=\"width:100%;height:100%;object-fit:cover;transition:transform 0.7s ease;cursor:pointer;\" @click=\"isImageModalOpen = true; modalImageSrc = '{$imageUrl}'; modalImageAlt = '{$name}'\">"
+                                    : ($faviconUrl 
+                                        ? "<div style=\"width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#fff;padding:20px;\">
+                                            <img src=\"{$faviconUrl}\" style=\"max-width:100%;max-height:100%;object-fit:contain;opacity:0.3;filter:grayscale(100%);\" alt=\"{$name}\">
+                                           </div>"
+                                        : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg, #f5f0e6 0%, #ebe5d6 100%);">
+                                            <svg style="width:28px;height:28px;opacity:0.18;color:#5c6448;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.8" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.247 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                           </div>');
 
                                 // Description
                                 $descHtml = $hasDescription 

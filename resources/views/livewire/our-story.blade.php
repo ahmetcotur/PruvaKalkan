@@ -2,15 +2,19 @@
     <!-- Hero Section -->
     <div class="relative h-[60vh] md:h-[70vh] flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <img src="{{ asset('images/gallery/DJI_0834-Edit-scaled.jpg') }}" class="w-full h-full object-cover" alt="Pruva Story Hero">
+            @php $heroImg = \App\Models\Setting::getValue('our_story_hero_image', asset('images/gallery/DJI_0834-Edit-scaled.jpg')); @endphp
+            <img src="{{ $heroImg }}" 
+                 srcset="{{ \App\Models\Setting::getValue('our_story_hero_image', '', 's') }} 400w, {{ \App\Models\Setting::getValue('our_story_hero_image', '', 'm') }} 800w, {{ $heroImg }} 1920w"
+                 sizes="100vw"
+                 class="w-full h-full object-cover" alt="Pruva Story Hero">
             <div class="absolute inset-0 bg-brand-dark/40"></div>
         </div>
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-20">
             <h1 class="gsap-title text-4xl md:text-6xl lg:text-7xl font-light text-white mb-6 tracking-wide leading-tight">
-                {{ __('Our Story Title') }}
+                {{ \App\Models\Setting::getValue('our_story_hero_title', __('Our Story Title')) }}
             </h1>
             <p class="gsap-subtitle text-brand text-lg md:text-xl tracking-widest font-light uppercase">
-                {{ __('Our Story Subtitle') }}
+                {{ \App\Models\Setting::getValue('our_story_hero_subtitle', __('Our Story Subtitle')) }}
             </p>
         </div>
     </div>
@@ -23,14 +27,18 @@
             <!-- Section 1: The Roots -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-32">
                 <div class="gsap-left order-2 md:order-1">
-                    <h2 class="text-brand-olive uppercase tracking-[0.2em] text-sm font-semibold mb-6">{{ __('The Roots Title') }}</h2>
+                    <h2 class="text-brand-olive uppercase tracking-[0.2em] text-sm font-semibold mb-6">{{ \App\Models\Setting::getValue('our_story_roots_title', __('The Roots Title')) }}</h2>
                     <p class="text-gray-600 leading-[1.8] font-light text-lg mb-0 first-letter:text-5xl first-letter:font-serif first-letter:mr-3 first-letter:float-left first-letter:text-brand-olive">
-                        {{ __('The Roots Content') }}
+                        {!! nl2br(e(\App\Models\Setting::getValue('our_story_roots_content', __('The Roots Content')))) !!}
                     </p>
                 </div>
                 <div class="gsap-right order-1 md:order-2">
                     <div class="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
-                        <img src="{{ asset('images/gallery/029A5168.jpg') }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="Roots Image">
+                        @php $rootsImg = \App\Models\Setting::getValue('our_story_roots_image', asset('images/gallery/029A5168.jpg')); @endphp
+                        <img src="{{ $rootsImg }}" 
+                             srcset="{{ \App\Models\Setting::getValue('our_story_roots_image', '', 's') }} 400w, {{ \App\Models\Setting::getValue('our_story_roots_image', '', 'm') }} 800w"
+                             sizes="(max-width: 768px) 100vw, 50vw"
+                             class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="Roots Image">
                     </div>
                 </div>
             </div>
@@ -39,13 +47,17 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-32">
                 <div class="gsap-left">
                     <div class="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
-                        <img src="{{ asset('images/gallery/029A5151.jpg') }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="Sea Image">
+                        @php $seaImg = \App\Models\Setting::getValue('our_story_sea_image', asset('images/gallery/029A5151.jpg')); @endphp
+                        <img src="{{ $seaImg }}" 
+                             srcset="{{ \App\Models\Setting::getValue('our_story_sea_image', '', 's') }} 400w, {{ \App\Models\Setting::getValue('our_story_sea_image', '', 'm') }} 800w"
+                             sizes="(max-width: 768px) 100vw, 50vw"
+                             class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="Sea Image">
                     </div>
                 </div>
                 <div class="gsap-right">
-                    <h2 class="text-brand-olive uppercase tracking-[0.2em] text-sm font-semibold mb-6">{{ __('The Sea Title') }}</h2>
-                    <p class="text-gray-600 leading-[1.8] font-light text-lg mb-0">
-                        {{ __('The Sea Content') }}
+                    <h2 class="text-brand-olive uppercase tracking-[0.2em] text-sm font-semibold mb-6">{{ \App\Models\Setting::getValue('our_story_sea_title', __('The Sea Title')) }}</h2>
+                    <p class="text-gray-600 leading-[1.8] font-light text-lg mb-0 text-justify">
+                        {!! nl2br(e(\App\Models\Setting::getValue('our_story_sea_content', __('The Sea Content')))) !!}
                     </p>
                 </div>
             </div>
@@ -53,14 +65,18 @@
             <!-- Section 3: The Flame -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-32">
                 <div class="gsap-left order-2 md:order-1">
-                    <h2 class="text-brand-olive uppercase tracking-[0.2em] text-sm font-semibold mb-6">{{ __('The Flame Title') }}</h2>
-                    <p class="text-gray-600 leading-[1.8] font-light text-lg mb-0">
-                        {{ __('The Flame Content') }}
+                    <h2 class="text-brand-olive uppercase tracking-[0.2em] text-sm font-semibold mb-6">{{ \App\Models\Setting::getValue('our_story_flame_title', __('The Flame Title')) }}</h2>
+                    <p class="text-gray-600 leading-[1.8] font-light text-lg mb-0 text-justify">
+                        {!! nl2br(e(\App\Models\Setting::getValue('our_story_flame_content', __('The Flame Content')))) !!}
                     </p>
                 </div>
                 <div class="gsap-right order-1 md:order-2">
                     <div class="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
-                        <img src="{{ asset('images/gallery/029A0982.jpg') }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="Flame Image">
+                        @php $flameImg = \App\Models\Setting::getValue('our_story_flame_image', asset('images/gallery/029A0982.jpg')); @endphp
+                        <img src="{{ $flameImg }}" 
+                             srcset="{{ \App\Models\Setting::getValue('our_story_flame_image', '', 's') }} 400w, {{ \App\Models\Setting::getValue('our_story_flame_image', '', 'm') }} 800w"
+                             sizes="(max-width: 768px) 100vw, 50vw"
+                             class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="Flame Image">
                     </div>
                 </div>
             </div>
@@ -69,29 +85,32 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-32">
                 <div class="gsap-left">
                     <div class="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
-                        <img src="{{ asset('images/gallery/029A5379.jpg') }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="Gathering Image">
+                        @php $gatheringImg = \App\Models\Setting::getValue('our_story_gathering_image', asset('images/gallery/029A5379.jpg')); @endphp
+                        <img src="{{ $gatheringImg }}" 
+                             srcset="{{ \App\Models\Setting::getValue('our_story_gathering_image', '', 's') }} 400w, {{ \App\Models\Setting::getValue('our_story_gathering_image', '', 'm') }} 800w"
+                             sizes="(max-width: 768px) 100vw, 50vw"
+                             class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="Gathering Image">
                     </div>
                 </div>
                 <div class="gsap-right">
-                    <h2 class="text-brand-olive uppercase tracking-[0.2em] text-sm font-semibold mb-6">{{ __('The Gathering Title') }}</h2>
-                    <p class="text-gray-600 leading-[1.8] font-light text-lg mb-0">
-                        {{ __('The Gathering Content') }}
+                    <h2 class="text-brand-olive uppercase tracking-[0.2em] text-sm font-semibold mb-6">{{ \App\Models\Setting::getValue('our_story_gathering_title', __('The Gathering Title')) }}</h2>
+                    <p class="text-gray-600 leading-[1.8] font-light text-lg mb-0 text-justify">
+                        {!! nl2br(e(\App\Models\Setting::getValue('our_story_gathering_content', __('The Gathering Content')))) !!}
                     </p>
                 </div>
             </div>
 
             <!-- Conclusion Section -->
             <div class="text-center max-w-3xl mx-auto py-20 border-t border-brand-olive/20">
-                <h2 class="text-3xl md:text-4xl font-light italic text-brand-olive mb-10">{{ __('Conclusion Title') }}</h2>
+                <h2 class="text-3xl md:text-4xl font-light italic text-brand-olive mb-10">{{ \App\Models\Setting::getValue('our_story_conclusion_title', __('Conclusion Title')) }}</h2>
                 <p class="text-gray-600 leading-[2] font-light text-lg italic">
-                    {{ __('Conclusion Content') }}
+                    {!! nl2br(e(\App\Models\Setting::getValue('our_story_conclusion_content', __('Conclusion Content')))) !!}
                 </p>
                 
                 <div class="mt-16">
                     <a href="{{ LaravelLocalization::getLocalizedURL(app()->getLocale(), 'menu') }}" class="inline-block px-12 py-5 bg-brand-olive text-white hover:bg-brand-dark transition-colors duration-300 uppercase tracking-widest text-sm font-medium rounded-full shadow-lg">
-                        {{ __('Discover Menu') }}
+                        {{ \App\Models\Setting::getValue('our_story_discover_menu_text', __('Discover Menu')) }}
                     </a>
-                </div>
             </div>
         </div>
     </div>

@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 use Spatie\Translatable\HasTranslations;
 
+use App\Traits\HasResponsiveImages;
+
 class GalleryImage extends Model
 {
-    use HasTranslations;
+    use HasTranslations, HasResponsiveImages;
 
     protected $guarded = [];
     

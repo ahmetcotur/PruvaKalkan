@@ -4,19 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
-
 use App\Traits\HasResponsiveImages;
 
-class BlogPost extends Model
+class Slide extends Model
 {
     use HasTranslations, HasResponsiveImages;
 
     protected $guarded = [];
 
-    public $translatable = ['title', 'slug', 'description', 'content'];
-
-    protected $casts = [
-        'is_active' => 'boolean',
-        'published_at' => 'datetime',
-    ];
+    public $translatable = ['title', 'sub_title', 'description'];
 }

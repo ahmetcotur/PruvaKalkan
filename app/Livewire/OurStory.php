@@ -10,8 +10,8 @@ class OurStory extends Component
     {
         return view('livewire.our-story')
             ->layout('components.layouts.app', [
-                'title' => __('Our Story Title') . ' | Pruva Restaurant Kaş',
-                'description' => __('Our Story Subtitle')
+                'title' => \App\Models\Setting::getValue('our_story_meta_title', __('Our Story Title') . ' | Pruva Restaurant Kaş'),
+                'description' => \App\Models\Setting::getValue('our_story_meta_description', __('Our Story Subtitle'))
             ]);
     }
 }

@@ -23,7 +23,10 @@
 
         @if($post->image)
             <div class="gsap-fade-in w-full aspect-[21/9] mb-16 overflow-hidden rounded-3xl shadow-sm relative">
-                <img src="{{ asset('images/' . $post->image) }}" alt="{{ $post->title }}" class="w-full h-full object-cover">
+                <img src="{{ $post->getImageUrl() }}" 
+                     srcset="{{ $post->getImageUrl('s') }} 400w, {{ $post->getImageUrl('m') }} 800w, {{ $post->getImageUrl() }} 1920w"
+                     sizes="100vw"
+                     alt="{{ $post->title }}" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-brand-dark/5 pointer-events-none"></div>
             </div>
         @endif

@@ -12,6 +12,15 @@ class EditGalleryImage extends EditRecord
     use Translatable;
     protected static string $resource = GalleryImageResource::class;
 
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if (!empty($data['image']) && $data['image'] !== $this->record->image) {
+            $data['image'] = \App\Services\ImageService::process($data['image'], 'gallery');
+        }
+
+        return $data;
+    }
+
     protected function getHeaderActions(): array
     {
         return [

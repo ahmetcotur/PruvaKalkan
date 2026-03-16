@@ -5,7 +5,7 @@
             @click="open = true" 
             class="text-brand-dark/50 hover:text-brand-olive transition-colors underline underline-offset-4 decoration-brand-dark/20 hover:decoration-brand-olive cursor-pointer bg-transparent border-0"
         >
-            {{ __('If you had a bad experience, let\'s keep it between us so we can improve.') }}
+            {{ __('Kötü bir deneyim yaşattıysak aramızda kalsın, bize yazın ki kendimizi iyileştirelim.') }}
         </button>
     </div>
 
@@ -50,8 +50,8 @@
                     </button>
                 </div>
             @else
-                <h3 class="font-serif text-3xl font-light text-brand-dark mb-2">{{ __('Share Your Feedback') }}</h3>
-                <p class="text-brand-dark/60 text-sm mb-6">{{ __('If you had a bad experience, let\'s keep it between us so we can improve.') }}</p>
+                <h3 class="font-serif text-3xl font-light text-brand-dark mb-2">{{ __('Geri Bildirim Paylaşın') }}</h3>
+                <p class="text-brand-dark/60 text-sm mb-6">{{ __('Kötü bir deneyim yaşattıysak aramızda kalsın, bize yazın ki kendimizi iyileştirelim.') }}</p>
 
                 <form wire:submit="submit" class="space-y-4">
                     <div>

@@ -17,5 +17,14 @@ class CreateMenuItem extends CreateRecord
             Actions\LocaleSwitcher::make(),
         ];
     }
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        if (!empty($data['image'])) {
+            $data['image'] = \App\Services\ImageService::process($data['image'], 'menu-items');
+        }
+
+        return $data;
+    }
+
     protected static string $resource = MenuItemResource::class;
 }
