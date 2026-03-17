@@ -21,12 +21,24 @@
             </h1>
         </div>
 
+        @php
+            $favicon = \App\Models\Setting::getValue('favicon');
+            $faviconUrl = $favicon ? (str_starts_with($favicon, 'http') ? $favicon : \Illuminate\Support\Facades\Storage::url($favicon)) : null;
+        @endphp
+
         @if($post->image)
             <div class="gsap-fade-in w-full aspect-[21/9] mb-16 overflow-hidden rounded-3xl shadow-sm relative">
                 <img src="{{ $post->getImageUrl() }}" 
                      srcset="{{ $post->getImageUrl('s') }} 400w, {{ $post->getImageUrl('m') }} 800w, {{ $post->getImageUrl() }} 1920w"
                      sizes="100vw"
                      alt="{{ $post->title }}" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-brand-dark/5 pointer-events-none"></div>
+            </div>
+        @else
+            <div class="gsap-fade-in w-full aspect-[21/9] mb-16 overflow-hidden rounded-3xl shadow-sm relative bg-brand-light/50 flex items-center justify-center p-24">
+                @if($faviconUrl)
+                    <img src="{{ $faviconUrl }}" alt="{{ $post->title }}" class="w-48 h-48 object-contain opacity-20 filter grayscale">
+                @endif
                 <div class="absolute inset-0 bg-brand-dark/5 pointer-events-none"></div>
             </div>
         @endif

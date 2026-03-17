@@ -24,14 +24,24 @@
                         
                         <!-- Image Container with aspect ratio -->
                         <div class="aspect-[4/3] overflow-hidden relative border-b border-brand-dark/5">
+                            @php
+                                $favicon = \App\Models\Setting::getValue('favicon');
+                                $faviconUrl = $favicon ? (str_starts_with($favicon, 'http') ? $favicon : \Illuminate\Support\Facades\Storage::url($favicon)) : null;
+                            @endphp
                             @if($post->image)
                                 <img src="{{ asset('images/' . $post->image) }}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
                             @else
-                                @php
-                                    $indexPlaceholders = ['029A0982.jpg', '029A0973.jpg', '029A5151.jpg', '029A5168.jpg', '029A1008.jpg'];
-                                    $randomIndexPh = $indexPlaceholders[array_rand($indexPlaceholders)];
-                                @endphp
-                                <img src="{{ asset('images/gallery/' . $randomIndexPh) }}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+                                <div class="w-full h-full flex items-center justify-center p-16 bg-brand-light/50">
+                                    @if($faviconUrl)
+                                        <img src="{{ $faviconUrl }}" alt="{{ $post->title }}" class="w-32 h-32 object-contain opacity-20 filter grayscale group-hover:opacity-40 transition-all duration-700">
+                                    @else
+                                        @php
+                                            $indexPlaceholders = ['029A0982.jpg', '029A0973.jpg', '029A5151.jpg', '029A5168.jpg', '029A1008.jpg'];
+                                            $randomIndexPh = $indexPlaceholders[array_rand($indexPlaceholders)];
+                                        @endphp
+                                        <img src="{{ asset('images/gallery/' . $randomIndexPh) }}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+                                    @endif
+                                </div>
                             @endif
                             <div class="absolute inset-0 bg-brand-dark/5 group-hover:bg-transparent transition-colors duration-500"></div>
                         </div>

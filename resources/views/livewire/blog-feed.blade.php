@@ -26,15 +26,24 @@
                         <div class="aspect-video w-full overflow-hidden relative flex-shrink-0 bg-brand-light">
                             @php
                                 $imgSrc = trim((string)$post['image']);
+                                $favicon = \App\Models\Setting::getValue('favicon');
+                                $faviconUrl = $favicon ? (str_starts_with($favicon, 'http') ? $favicon : \Illuminate\Support\Facades\Storage::url($favicon)) : null;
+
                                 if (empty($imgSrc) || str_contains($imgSrc, '/plugins/')) {
-                                    $blogPlaceholders = ['029A0982.jpg', '029A0973.jpg', '029A5151.jpg', '029A5168.jpg', '029A1008.jpg'];
-                                    $randomBlogPh = $blogPlaceholders[array_rand($blogPlaceholders)];
-                                    $finalImg = asset('images/gallery/' . $randomBlogPh);
+                                    $finalImg = $faviconUrl;
+                                    $isFallback = true;
                                 } else {
                                     $finalImg = asset('images/' . $imgSrc);
+                                    $isFallback = false;
                                 }
                             @endphp
-                            <img src="{{ $finalImg }}" alt="{{ $post['title'] }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+                            @if($isFallback && $finalImg)
+                                <div class="w-full h-full flex items-center justify-center p-12 bg-brand-light/50">
+                                    <img src="{{ $finalImg }}" alt="{{ $post['title'] }}" class="w-24 h-24 object-contain opacity-20 filter grayscale group-hover:opacity-40 transition-all duration-700">
+                                </div>
+                            @else
+                                <img src="{{ $finalImg ?: asset('images/gallery/029A0982.jpg') }}" alt="{{ $post['title'] }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+                            @endif
                             <div class="absolute inset-0 bg-brand-dark/10 group-hover:bg-transparent transition-colors duration-500"></div>
                         </div>
                         
