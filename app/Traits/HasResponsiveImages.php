@@ -19,14 +19,27 @@ trait HasResponsiveImages
         }
 
         $extension = pathinfo($value, PATHINFO_EXTENSION);
+        $originalValue = $value;
+        $sizedValue = $value;
+        
         if ($size && in_array($size, ['m', 's'])) {
-            $value = str_replace('.' . $extension, '_' . $size . '.' . $extension, $value);
+            $sizedValue = str_replace('.' . $extension, '_' . $size . '.' . $extension, $value);
         }
 
-        if (file_exists(public_path('images/' . $value))) {
-            return asset('images/' . $value);
+        // 1. Check in public/images (for starter assets)
+        if (file_exists(public_path('images/' . $sizedValue))) {
+            return asset('images/' . $sizedValue);
+        }
+        if ($sizedValue !== $originalValue && file_exists(public_path('images/' . $originalValue))) {
+             return asset('images/' . $originalValue);
         }
 
-        return asset('storage/' . $value);
+        // 2. Check in storage (for user uploads)
+        // We use Storage::exists for a cleaner check on the storage disk
+        if (Storage::disk('public')->exists($sizedValue)) {
+            return asset('storage/' . $sizedValue);
+        }
+
+        return asset('storage/' . $originalValue);
     }
 }

@@ -31,9 +31,9 @@
                     @endphp
                     <div class="gsap-fade-in break-inside-avoid relative group overflow-hidden cursor-pointer rounded-2xl"
                          @click="openModal('{{ $imgUrl }}')">
-                        <img src="{{ $img->getImageUrl('m') }}" 
-                             srcset="{{ $img->getImageUrl('s') }} 400w, {{ $img->getImageUrl('m') }} 800w"
-                             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                         <img src="{{ $img->getImageUrl('m') }}" 
+                              srcset="{{ $img->getImageUrl('s') }} 400w, {{ $img->getImageUrl('m') }} 800w"
+                              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                              alt="{{ $img->alt_text ?? $img->title }}" class="w-full h-auto object-cover group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute inset-0 bg-brand-dark/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
                             <div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white scale-0 group-hover:scale-100 transition-transform duration-500">
