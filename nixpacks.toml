@@ -6,7 +6,7 @@ cacheDirectories = ["/root/.composer/cache", "/root/.npm"]
 cmds = ["composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader", "npm install"]
 
 [phases.build]
-cmds = ["npm run build"]
+cmds = ["npm run build", "php artisan storage:link"]
 
 [start]
 cmd = "php artisan optimize:clear && php artisan serve --host=0.0.0.0 --port=3000"
