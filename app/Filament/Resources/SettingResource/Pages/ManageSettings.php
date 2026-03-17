@@ -202,23 +202,28 @@ class ManageSettings extends Page implements HasForms
             $setting = Setting::where('key', $key)->first();
             if (!$setting) continue;
 
+            $processValue = function($val, $oldVal) use ($setting) {
+                if (($setting->type === 'image' || $setting->type === 'images') && !empty($val) && $val !== ($oldVal ?: '')) {
+                    return \App\Services\ImageService::process($val, 'settings');
+                }
+                return $val;
+            };
+
             if ($this->isTranslatableSetting($setting)) {
                 // If it's translatable, the value is an array ['tr' => ..., 'en' => ...]
                 if (is_array($value)) {
+                    $oldTranslations = $setting->getTranslations('value');
                     foreach ($value as $lang => $val) {
-                        if ($setting->type === 'image' || $setting->type === 'images') {
-                            $val = \App\Services\ImageService::process($val, 'settings');
-                        }
-                        $setting->setTranslation('value', $lang, $val);
+                        $processedVal = $processValue($val, $oldTranslations[$lang] ?? null);
+                        $setting->setTranslation('value', $lang, $processedVal);
                     }
                 }
             } else {
-                if ($setting->type === 'image' || $setting->type === 'images') {
-                    $value = \App\Services\ImageService::process($value, 'settings');
-                }
                 // If it's global, we save it for both locales to satisfy Spatie
-                $setting->setTranslation('value', 'tr', $value);
-                $setting->setTranslation('value', 'en', $value);
+                $oldVal = $setting->getTranslation('value', 'tr');
+                $processedVal = $processValue($value, $oldVal);
+                $setting->setTranslation('value', 'tr', $processedVal);
+                $setting->setTranslation('value', 'en', $processedVal);
             }
             
             $setting->save();
