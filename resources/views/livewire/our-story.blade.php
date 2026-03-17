@@ -118,55 +118,84 @@
 
 <script>
     document.addEventListener('livewire:navigated', () => {
-        gsap.from('.gsap-title', {
-            y: 50,
-            opacity: 0,
-            duration: 1.2,
-            ease: 'power3.out'
-        });
+        if (document.querySelector('.gsap-title')) {
+            gsap.from('.gsap-title', {
+                y: 50,
+                opacity: 0,
+                duration: 1.2,
+                ease: 'power3.out'
+            });
+        }
         
-        gsap.from('.gsap-subtitle', {
-            y: 30,
-            opacity: 0,
-            duration: 1,
-            delay: 0.3,
-            ease: 'power3.out'
-        });
+        if (document.querySelector('.gsap-subtitle')) {
+            gsap.from('.gsap-subtitle', {
+                y: 30,
+                opacity: 0,
+                duration: 1,
+                delay: 0.3,
+                ease: 'power3.out'
+            });
+        }
+
+        // Global fade-in handler to prevent "target not found" errors
+        if (document.querySelector('.gsap-fade-in')) {
+            gsap.from('.gsap-fade-in', {
+                opacity: 0,
+                y: 20,
+                duration: 1,
+                stagger: 0.2,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.gsap-fade-in',
+                    start: 'top 90%',
+                }
+            });
+        }
 
         const revealSections = document.querySelectorAll('.grid');
         revealSections.forEach((section) => {
-            gsap.from(section.querySelector('.gsap-left'), {
-                scrollTrigger: {
-                    trigger: section,
-                    start: 'top 80%',
-                },
-                x: -50,
-                opacity: 0,
-                duration: 1,
-                ease: 'power2.out'
-            });
+            const left = section.querySelector('.gsap-left');
+            const right = section.querySelector('.gsap-right');
+
+            if (left) {
+                gsap.from(left, {
+                    scrollTrigger: {
+                        trigger: section,
+                        start: 'top 80%',
+                    },
+                    x: -50,
+                    opacity: 0,
+                    duration: 1,
+                    ease: 'power2.out'
+                });
+            }
             
-            gsap.from(section.querySelector('.gsap-right'), {
-                scrollTrigger: {
-                    trigger: section,
-                    start: 'top 80%',
-                },
-                x: 50,
-                opacity: 0,
-                duration: 1,
-                ease: 'power2.out'
-            });
+            if (right) {
+                gsap.from(right, {
+                    scrollTrigger: {
+                        trigger: section,
+                        start: 'top 80%',
+                    },
+                    x: 50,
+                    opacity: 0,
+                    duration: 1,
+                    ease: 'power2.out'
+                });
+            }
         });
 
-        gsap.from('.text-center.max-w-3xl', {
-            scrollTrigger: {
-                trigger: '.text-center.max-w-3xl',
-                start: 'top 80%',
-            },
-            y: 40,
-            opacity: 0,
-            duration: 1,
-            ease: 'power2.out'
-        });
+        const centerSection = document.querySelector('.text-center.max-w-3xl');
+        if (centerSection) {
+            gsap.from(centerSection, {
+                scrollTrigger: {
+                    trigger: centerSection,
+                    start: 'top 80%',
+                },
+                y: 40,
+                opacity: 0,
+                duration: 1,
+                ease: 'power2.out'
+            });
+        }
     });
 </script>

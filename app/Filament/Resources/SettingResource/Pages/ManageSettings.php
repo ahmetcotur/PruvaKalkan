@@ -163,6 +163,7 @@ class ManageSettings extends Page implements HasForms
             'image' => FileUpload::make($key)
                 ->label($label)
                 ->image()
+                ->disk('public')
                 ->directory('settings')
                 ->preserveFilenames(),
             'images' => FileUpload::make($key)
@@ -170,6 +171,7 @@ class ManageSettings extends Page implements HasForms
                 ->image()
                 ->multiple()
                 ->reorderable()
+                ->disk('public')
                 ->directory('settings')
                 ->preserveFilenames(),
             'color' => ColorPicker::make($key)
