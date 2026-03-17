@@ -59,7 +59,7 @@ class SettingResource extends Resource
                             ]),
                         
                         Forms\Components\Tabs::make('Çeviriler')
-                            ->visible(fn (Forms\Get $get) => $get('group') === 'seo' || $get('group') === 'homepage' || $get('group') === 'our_story' || $get('group') === 'social' || in_array($get('key'), ['site_name', 'address']))
+                            ->visible(fn (Forms\Get $get) => in_array($get('group'), ['seo', 'homepage', 'our_story', 'social', 'contact']) || in_array($get('key'), ['site_name', 'address']))
                             ->tabs([
                                 Forms\Components\Tabs\Tab::make('Türkçe')
                                     ->schema([
@@ -135,7 +135,7 @@ class SettingResource extends Resource
                             ->columnSpanFull(),
                             
                         Forms\Components\Section::make('Evrensel Değer (Global)')
-                            ->visible(fn (Forms\Get $get) => !($get('group') === 'seo' || in_array($get('key'), ['site_name', 'address'])))
+                            ->visible(fn (Forms\Get $get) => !(in_array($get('group'), ['seo', 'contact']) || in_array($get('key'), ['site_name', 'address'])))
                             ->schema([
                                 Forms\Components\TextInput::make('value_global')
                                     ->label('Değer')
