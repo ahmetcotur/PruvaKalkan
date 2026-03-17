@@ -26,41 +26,31 @@ class BeverageMenuSeeder extends Seeder
             ]);
         }
 
-        // Clean up subcategories under "İçecek Menüsü" except "Şaraplar" (ID 27 is usually wines, let's keep it if it exists)
-        // Actually, let's just delete categories that we are going to replace
-        $subCatNames = [
-            'İçecekler', 'Rakılar', 'Biralar', 'Sıcak İçecekler', 'Viskiler', 'Vodkalar', 
-            'Cin', 'İthal İçkiler', 'Tekila', 'Kokteyller', 'Alkolsüz Kokteyller'
-        ];
-
-        foreach ($subCatNames as $name) {
-            $cat = Category::where('parent_id', $drinkCat->id)
-                ->where('name->tr', $name)
-                ->first();
-            if ($cat) {
-                MenuItem::where('category_id', $cat->id)->delete();
-                $cat->delete();
-            }
+        // Clean up categories under "İçecek Menüsü"
+        $oldSubCats = Category::where('parent_id', $drinkCat->id)->get();
+        foreach ($oldSubCats as $cat) {
+            $cat->delete();
         }
 
-        // 1. SOFT DRINKS / İÇECEKLER
+        // 1. SOFT DRINKS / SOĞUK İÇECEKLER
         $softDrinks = Category::create([
             'parent_id' => $drinkCat->id,
-            'name' => ['en' => 'Soft Drinks', 'tr' => 'İçecekler'],
+            'name' => ['en' => 'Soft Drinks', 'tr' => 'Soğuk İçecekler'],
             'order_column' => 1,
             'is_active' => true
         ]);
         $this->seedItems($softDrinks->id, [
             ['tr' => 'Su 1 Litre', 'en' => 'Water 1 Litre', 'price' => 100],
             ['tr' => 'Soda 1 Litre', 'en' => 'Mineral Water 1 Litre', 'price' => 150],
-            ['tr' => 'Soda', 'en' => 'Small Mineral Water', 'price' => 60],
+            ['tr' => 'Küçük Soda', 'en' => 'Small Mineral Water', 'price' => 60],
             ['tr' => 'Tonik', 'en' => 'Tonic Water', 'price' => 150],
-            ['tr' => 'Kola, Fanta, Sprite, Cola Zero, Ice Tea', 'en' => 'Cola, Fanta, Sprite, Cola Zero, Ice Tea', 'price' => 150],
+            ['tr' => 'Kola / Fanta / Sprite / Cola Zero', 'en' => 'Cola / Fanta / Sprite / Cola Zero', 'price' => 150],
+            ['tr' => 'Ice Tea', 'en' => 'Ice Tea', 'price' => 150],
             ['tr' => 'Meyve Suları (Şeftali, Ananas, Vişne, Portakal)', 'en' => 'Fruit Juices (Peach, Pineapple, Cherry, Orange)', 'price' => 150],
             ['tr' => 'Milkshakeler (Vanilya, Çikolata, Muz)', 'en' => 'Milkshakes (Vanilla, Chocolate, Banana)', 'price' => 300],
             ['tr' => 'Ev Yapımı Limonata', 'en' => 'Homemade Lemonade', 'price' => 250],
             ['tr' => 'Taze Portakal Suyu', 'en' => 'Fresh Orange Juice', 'price' => 250],
-            ['tr' => 'Redbull', 'en' => 'Redbull', 'price' => 200],
+            ['tr' => 'Red Bull', 'en' => 'Red Bull', 'price' => 200],
         ]);
 
         // 2. HOT DRINKS / SICAK İÇECEKLER
@@ -72,12 +62,14 @@ class BeverageMenuSeeder extends Seeder
         ]);
         $this->seedItems($hotDrinks->id, [
             ['tr' => 'Americano', 'en' => 'Americano', 'price' => 160],
-            ['tr' => 'Cappuccino, Latte', 'en' => 'Cappuccino, Latte', 'price' => 180],
+            ['tr' => 'Cappuccino', 'en' => 'Cappuccino', 'price' => 180],
+            ['tr' => 'Latte', 'en' => 'Latte', 'price' => 180],
             ['tr' => 'Iced Coffee', 'en' => 'Iced Coffee', 'price' => 300],
             ['tr' => 'Espresso', 'en' => 'Espresso', 'price' => 140],
+            ['tr' => 'Double Espresso', 'en' => 'Double Espresso', 'price' => 180],
             ['tr' => 'Türk Kahvesi', 'en' => 'Turkish Coffee', 'price' => 130],
-            ['tr' => 'Irish Coffee (Baileys, Tia Maria, Kahlua)', 'en' => 'Irish Coffee (Baileys, Tia Maria, Kahlua)', 'price' => 500],
-            ['tr' => 'Çay', 'en' => 'Tea', 'price' => 50],
+            ['tr' => 'Irish Coffee', 'en' => 'Irish Coffee', 'price' => 500],
+            ['tr' => 'Demleme Çay', 'en' => 'Turkish Tea', 'price' => 50],
             ['tr' => 'Elma Çayı', 'en' => 'Apple Tea', 'price' => 50],
         ]);
 
@@ -89,85 +81,96 @@ class BeverageMenuSeeder extends Seeder
             'is_active' => true
         ]);
         $this->seedItems($beers->id, [
-            ['tr' => 'Efes 50 cl', 'en' => 'Efes 50 cl', 'price' => 250],
-            ['tr' => 'Tuborg Gold', 'en' => 'Tuborg Gold', 'price' => 280],
-            ['tr' => 'Corona, Miller, Becks, Apple Cider', 'en' => 'Corona, Miller, Becks, Apple Cider', 'price' => 340],
+            ['tr' => 'Efes 50 CL', 'en' => 'Efes 50 CL', 'price' => 250],
+            ['tr' => 'Tuborg 50 CL', 'en' => 'Tuborg 50 CL', 'price' => 280],
+            ['tr' => 'Corona / Miller / Becks / Apple Cider', 'en' => 'Corona / Miller / Becks / Apple Cider', 'price' => 340],
             ['tr' => 'Carlsberg', 'en' => 'Carlsberg', 'price' => 340],
-            ['tr' => 'Filtresiz Bomonti', 'en' => 'Bomonti Unfiltered', 'price' => 320],
+            ['tr' => 'Bomonti Filtresiz', 'en' => 'Bomonti Unfiltered', 'price' => 320],
         ]);
 
-        // 4. WHISKIES / VİSKİLER
-        $whiskies = Category::create([
-            'parent_id' => $drinkCat->id,
-            'name' => ['en' => 'Whiskies', 'tr' => 'Viskiler'],
-            'order_column' => 4,
-            'is_active' => true
-        ]);
-        $this->seedItems($whiskies->id, [
-            ['tr' => 'Chivas Regal', 'en' => 'Chivas Regal', 'price' => 550],
-            ['tr' => 'Red Label', 'en' => 'Red Label', 'price' => 400],
-            ['tr' => 'Black Label', 'en' => 'Black Label', 'price' => 450],
-            ['tr' => 'Jack Daniel\'s', 'en' => 'Jack Daniel\'s', 'price' => 500],
-        ], "Mixers (Tonic, Sprite, Cola) fiyatlara dahil değildir.");
-
-        // 5. VODKA / VODKALAR
-        $vodkas = Category::create([
-            'parent_id' => $drinkCat->id,
-            'name' => ['en' => 'Vodkas', 'tr' => 'Vodkalar'],
-            'order_column' => 5,
-            'is_active' => true
-        ]);
-        $this->seedItems($vodkas->id, [
-            ['tr' => 'Yerli Vodka', 'en' => 'Local Vodka', 'price' => 300],
-            ['tr' => 'Smirnoff Red', 'en' => 'Smirnoff Red', 'price' => 400],
-            ['tr' => 'Absolut', 'en' => 'Absolut', 'price' => 450],
-        ], "Mixers (Tonic, Sprite, Cola) fiyatlara dahil değildir.");
-
-        // 6. GIN / CİN
-        $gin = Category::create([
-            'parent_id' => $drinkCat->id,
-            'name' => ['en' => 'Gin', 'tr' => 'Cin'],
-            'order_column' => 6,
-            'is_active' => true
-        ]);
-        $this->seedItems($gin->id, [
-            ['tr' => 'Yerli Cin', 'en' => 'Local Cin', 'price' => 300],
-            ['tr' => 'Gordon\'s, Gordon\'s Pink', 'en' => 'Gordon\'s, Gordon\'s Pink', 'price' => 400],
-            ['tr' => 'Bombay', 'en' => 'Bombay', 'price' => 450],
-            ['tr' => 'Hendrick\'s', 'en' => 'Hendrick\'s', 'price' => 500],
-            ['tr' => 'Tanqueray London Dry Gin', 'en' => 'Tanqueray London Dry Gin', 'price' => 450],
-        ], "Mixers (Tonic, Sprite, Cola) fiyatlara dahil değildir.");
-
-        // 7. IMPORTS / İTHAL İÇKİLER
+        // 4. IMPORTS / İTHAL İÇKİLER
         $imports = Category::create([
             'parent_id' => $drinkCat->id,
             'name' => ['en' => 'Imports', 'tr' => 'İthal İçkiler'],
-            'order_column' => 7,
+            'order_column' => 4,
             'is_active' => true
         ]);
         $this->seedItems($imports->id, [
             ['tr' => 'Bacardi', 'en' => 'Bacardi', 'price' => 450],
-            ['tr' => 'Kaptan Morgan', 'en' => 'Captain Morgan', 'price' => 400],
+            ['tr' => 'Captain Morgan', 'en' => 'Captain Morgan', 'price' => 400],
             ['tr' => 'Malibu', 'en' => 'Malibu', 'price' => 300],
             ['tr' => 'Baileys', 'en' => 'Baileys', 'price' => 300],
             ['tr' => 'Tia Maria', 'en' => 'Tia Maria', 'price' => 250],
             ['tr' => 'Archers', 'en' => 'Archers', 'price' => 300],
             ['tr' => 'Cointreau', 'en' => 'Cointreau', 'price' => 450],
             ['tr' => 'Disaronno Amaretto', 'en' => 'Disaronno Amaretto', 'price' => 350],
-            ['tr' => 'Yerli Brandy', 'en' => 'Local Brandy', 'price' => 350],
+            ['tr' => 'Yerli Brendi', 'en' => 'Local Brandy', 'price' => 350],
             ['tr' => 'Metaxa', 'en' => 'Metaxa', 'price' => 500],
-        ], "Mixers (Tonic, Sprite, Cola) fiyatlara dahil değildir.");
+        ]);
 
-        // 8. TEQUILA / TEKİLA
+        // 5. WHISKIES / VİSKİLER
+        $whiskies = Category::create([
+            'parent_id' => $drinkCat->id,
+            'name' => ['en' => 'Whiskies', 'tr' => 'Viskiler'],
+            'order_column' => 5,
+            'is_active' => true
+        ]);
+        $this->seedItems($whiskies->id, [
+            ['tr' => 'Chivas Regal 12', 'en' => 'Chivas Regal 12', 'price' => 550],
+            ['tr' => 'Chivas Regal 18', 'en' => 'Chivas Regal 18', 'price' => 950],
+            ['tr' => 'Jack Daniels', 'en' => 'Jack Daniels', 'price' => 450],
+            ['tr' => 'Johnnie Walker Red Label', 'en' => 'Johnnie Walker Red Label', 'price' => 400],
+            ['tr' => 'Johnnie Walker Black Label', 'en' => 'Johnnie Walker Black Label', 'price' => 480],
+            ['tr' => 'Grants', 'en' => 'Grants', 'price' => 400],
+            ['tr' => 'J&B', 'en' => 'J&B', 'price' => 400],
+            ['tr' => 'Jameson', 'en' => 'Jameson', 'price' => 450],
+            ['tr' => 'Monkey Shoulder', 'en' => 'Monkey Shoulder', 'price' => 600],
+            ['tr' => 'Jim Beam', 'en' => 'Jim Beam', 'price' => 400],
+            ['tr' => 'Talisker 10', 'en' => 'Talisker 10', 'price' => 700],
+            ['tr' => 'The Glenlivet', 'en' => 'The Glenlivet', 'price' => 650],
+        ]);
+
+        // 6. VODKA / VODKALAR
+        $vodkas = Category::create([
+            'parent_id' => $drinkCat->id,
+            'name' => ['en' => 'Vodka', 'tr' => 'Vodkalar'],
+            'order_column' => 6,
+            'is_active' => true
+        ]);
+        $this->seedItems($vodkas->id, [
+            ['tr' => 'Absolut', 'en' => 'Absolut', 'price' => 400],
+            ['tr' => 'Smirnoff', 'en' => 'Smirnoff', 'price' => 350],
+            ['tr' => 'Belvedere', 'en' => 'Belvedere', 'price' => 650],
+            ['tr' => 'Grey Goose', 'en' => 'Grey Goose', 'price' => 700],
+        ]);
+
+        // 7. TEQUILA / TEKİLA
         $tequila = Category::create([
             'parent_id' => $drinkCat->id,
             'name' => ['en' => 'Tequila', 'tr' => 'Tekila'],
-            'order_column' => 8,
+            'order_column' => 7,
             'is_active' => true
         ]);
         $this->seedItems($tequila->id, [
-            ['tr' => 'Olmeca', 'en' => 'Olmeca', 'price' => 300],
-            ['tr' => 'Sierra', 'en' => 'Sierra', 'price' => 300],
+            ['tr' => 'Olmeca Silver', 'en' => 'Olmeca Silver', 'price' => 350],
+            ['tr' => 'Olmeca Gold', 'en' => 'Olmeca Gold', 'price' => 380],
+            ['tr' => 'Avion', 'en' => 'Avion', 'price' => 600],
+        ]);
+
+        // 8. GIN / CİN
+        $gin = Category::create([
+            'parent_id' => $drinkCat->id,
+            'name' => ['en' => 'Gin', 'tr' => 'Cin'],
+            'order_column' => 8,
+            'is_active' => true
+        ]);
+        $this->seedItems($gin->id, [
+            ['tr' => 'Beefeater', 'en' => 'Beefeater', 'price' => 400],
+            ['tr' => 'Bombay Sapphire', 'en' => 'Bombay Sapphire', 'price' => 450],
+            ['tr' => 'Tanqueray', 'en' => 'Tanqueray', 'price' => 450],
+            ['tr' => 'Hendricks', 'en' => 'Hendricks', 'price' => 650],
+            ['tr' => 'Monkey 47', 'en' => 'Monkey 47', 'price' => 700],
+            ['tr' => 'Gordon’s Pink', 'en' => 'Gordon’s Pink', 'price' => 400],
         ]);
 
         // 9. COCKTAILS / KOKTEYLLER
@@ -178,92 +181,219 @@ class BeverageMenuSeeder extends Seeder
             'is_active' => true
         ]);
         $this->seedItems($cocktails->id, [
-            ['tr' => 'Margarita (Klasik veya Acılı)', 'en' => 'Margarita (Classic or Spicy)', 'price' => 500, 'desc' => ['tr' => 'Tekila, Cointreau, Taze Misket Limonu Suyu, Tuz', 'en' => 'Tequila, Cointreau, Fresh Lime Juice, Salt']],
-            ['tr' => 'Çilekli Daiquiri', 'en' => 'Strawberry Daiquiri', 'price' => 550, 'desc' => ['tr' => 'Romat, Taze Çilek, Çilek Şurubu, Buz', 'en' => 'Rum, Fresh Strawberry, Strawberry Syrup, Ice']],
-            ['tr' => 'Mojito', 'en' => 'Mojito', 'price' => 500, 'desc' => ['tr' => 'Rom, Esmer Şeker, Lime Şurubu, Soda, Taze Nane, Lime', 'en' => 'Rum, Brown Sugar, Lime Syrup, Soda Water, Fresh Mint, Lime']],
-            ['tr' => 'Espresso Martini', 'en' => 'Espresso Martini', 'price' => 500, 'desc' => ['tr' => 'Vodka, Espresso, Kahve Likörü, Şeker Şurubu', 'en' => 'Vodka, Espresso, Coffee Liqueur, Sugar Syrup']],
-            ['tr' => 'Long Island Ice Tea', 'en' => 'Long Island Ice Tea', 'price' => 600, 'desc' => ['tr' => 'Vodka, Cin, Tekila, Rom, Triple Sec, Limon Suyu, Şeker Şurubu, Kola', 'en' => 'Vodka, Gin, Tequila, Rum, Triple Sec, Lemon Juice, Sugar Syrup, Cola']],
-            ['tr' => 'Pineacolada', 'en' => 'Pineacolada', 'price' => 500, 'desc' => ['tr' => 'Vodka, Malibu, Ananas Suyu, Süt, Krema, Hindistan Cevizi Şurubu', 'en' => 'Vodka, Malibu, Pineapple Juice, Milk, Cream, Coconut Syrup']],
-            ['tr' => 'Sex on the Beach', 'en' => 'Sex on the Beach', 'price' => 500, 'desc' => ['tr' => 'Vodka, Archers, Portakal Suyu, Nar Şurubu', 'en' => 'Vodka, Archers, Orange Juice, Pomegranate Syrup']],
-            ['tr' => 'Aperol Spritz', 'en' => 'Aperol Spritz', 'price' => 500, 'desc' => ['tr' => 'Aperol, Prosecco, Portakal Dilimi', 'en' => 'Aperol, Prosecco, Orange Slice']],
-            ['tr' => 'Pornstar Martini', 'en' => 'Pornstar Martini', 'price' => 600, 'desc' => ['tr' => 'Vodka, Çarkıfelek Likörü, Çarkıfelek Püresi, Vanilya Şurubu, Misket Limonu Suyu, Prosecco', 'en' => 'Vodka, Passion Fruit Liqueur, Passion Fruit Purée, Vanilla Syrup, Lime Juice, Prosecco']],
+            ['tr' => 'Aperol Spritz', 'en' => 'Aperol Spritz', 'price' => 500],
+            ['tr' => 'Negroni', 'en' => 'Negroni', 'price' => 500],
+            ['tr' => 'Margarita', 'en' => 'Margarita', 'price' => 500],
+            ['tr' => 'Mojito', 'en' => 'Mojito', 'price' => 500],
+            ['tr' => 'Espresso Martini', 'en' => 'Espresso Martini', 'price' => 500],
+            ['tr' => 'Old Fashioned', 'en' => 'Old Fashioned', 'price' => 550],
+            ['tr' => 'Pornstar Martini', 'en' => 'Pornstar Martini', 'price' => 550],
+            ['tr' => 'Cosmopolitan', 'en' => 'Cosmopolitan', 'price' => 500],
+            ['tr' => 'Lynchburg Lemonade', 'en' => 'Lynchburg Lemonade', 'price' => 550],
+            ['tr' => 'Long Island Ice Tea', 'en' => 'Long Island Ice Tea', 'price' => 600],
+            ['tr' => 'Whiskey Sour', 'en' => 'Whiskey Sour', 'price' => 500],
+            ['tr' => 'Pina Colada', 'en' => 'Pina Colada', 'price' => 550],
+            ['tr' => 'Moscow Mule', 'en' => 'Moscow Mule', 'price' => 500],
         ]);
 
-        // 10. MOCKTAILS / ALKOLSÜZ KOKTEYLLER
-        $mocktails = Category::create([
+        // 10. KIRMIZI ŞARAPLAR / RED WINES
+        $redWines = Category::create([
             'parent_id' => $drinkCat->id,
-            'name' => ['en' => 'Mocktails', 'tr' => 'Alkolsüz Kokteyller'],
+            'name' => ['en' => 'Red Wines', 'tr' => 'Kırmızı Şaraplar'],
             'order_column' => 10,
             'is_active' => true
         ]);
-        $this->seedItems($mocktails->id, [
-            ['tr' => 'Mickey Mouse', 'en' => 'Mickey Mouse', 'price' => 350, 'desc' => ['tr' => 'Ananas suyu, Portakal suyu, şeftali suyu, mavi curaçao Şurubu', 'en' => 'Pineapple Juice, Orange juice, peach juice, blue curaçao Syrup']],
-            ['tr' => 'Cinderella', 'en' => 'Cinderella', 'price' => 350, 'desc' => ['tr' => 'Portakal Suyu, Ananas Suyu, elma suyu, Grenadin', 'en' => 'Orange Juice, Pineapple Juice, apple juice, Grenadine']],
+        $this->seedItems($redWines->id, [
+            [
+                'tr' => 'Ev Şarabı', 'en' => 'House Wine',
+                'desc' => ['tr' => 'Yakut kırmızısı renkte, hafif içimli ve zarif alt notalara sahip bir şaraptır.', 'en' => 'A ruby red wine with a light palate and subtle undertones.'],
+                'variations' => [
+                    ['name' => ['tr' => 'Kadeh', 'en' => 'Glass'], 'price' => 300],
+                    ['name' => ['tr' => 'Şişe', 'en' => 'Bottle'], 'price' => 950],
+                ]
+            ],
+            [
+                'tr' => 'DLC Cabernet Sauvignon – Merlot', 'en' => 'DLC Cabernet Sauvignon – Merlot',
+                'desc' => ['tr' => 'Dengeli, zarif ve keyifli bir kırmızı şaraptır.', 'en' => 'An elegant, balanced, and enjoyable red wine.'],
+                'variations' => [
+                    ['name' => ['tr' => 'Kadeh', 'en' => 'Glass'], 'price' => 450],
+                    ['name' => ['tr' => 'Şişe', 'en' => 'Bottle'], 'price' => 1600],
+                ]
+            ],
+            [
+                'tr' => 'DLC Shiraz', 'en' => 'DLC Shiraz', 'price' => 1800,
+                'desc' => ['tr' => 'Siyah meyve aromalarına tütün ve baharat karakteri eşlik eder.', 'en' => 'Black fruit aromas are supported by tobacco and spice notes.']
+            ],
+            [
+                'tr' => 'Anfora Shiraz', 'en' => 'Anfora Shiraz', 'price' => 2000,
+                'desc' => ['tr' => 'Koyu meyve, baharat ve hafif meşe notalarıyla dengeli yapıya sahiptir.', 'en' => 'Produced from carefully selected Shiraz grapes with its balanced structure and smooth tannins.']
+            ],
+            [
+                'tr' => 'Anfora Merlot', 'en' => 'Anfora Merlot', 'price' => 2000,
+                'desc' => ['tr' => 'Kırmızı meyve aromaları, hafif baharat ve meşe notalarıyla dengeli bir yapı sunar.', 'en' => 'Produced from Merlot grapes with a balanced structure with red fruit aromas, subtle spice, and oak notes.']
+            ],
+            [
+                'tr' => 'Artı Cabernet Sauvignon – Merlot', 'en' => 'Artı Cabernet Sauvignon – Merlot', 'price' => 1900,
+                'desc' => ['tr' => 'Eğlenceli, zarif ve dengeli bir şaraptır.', 'en' => 'A lively, elegant, and well-balanced wine.']
+            ],
+            [
+                'tr' => 'Kav Boğazkere', 'en' => 'Kav Boğazkere', 'price' => 2200,
+                'desc' => ['tr' => 'Baharat, deri, tütün, pekmez ve meyve özlerini çağrıştıran aroma ve tatlara sahiptir.', 'en' => 'Lively and dark purple in colour, with aromas and flavours reminiscent of spice, leather, tobacco, molasses, and fruit essence.']
+            ],
+            [
+                'tr' => 'Premium Sarafin Meritage', 'en' => 'Premium Sarafin Meritage', 'price' => 5000,
+                'desc' => ['tr' => 'Koyu bordo rengi ve Fransız meşe fıçıda olgunlaştırılmış yapısıyla güçlü ve sofistike bir içim sunar.', 'en' => 'With its deep burgundy colour and French oak ageing, it offers a rich and sophisticated taste.']
+            ],
         ]);
 
-        // 11. RAKILAR
-        $rakis = Category::create([
+        // 11. BEYAZ ŞARAPLAR / WHITE WINES
+        $whiteWines = Category::create([
             'parent_id' => $drinkCat->id,
-            'name' => ['en' => 'Rakis', 'tr' => 'Rakılar'],
+            'name' => ['en' => 'White Wines', 'tr' => 'Beyaz Şaraplar'],
             'order_column' => 11,
             'is_active' => true
         ]);
+        $this->seedItems($whiteWines->id, [
+            [
+                'tr' => 'Ev Şarabı', 'en' => 'House Wine',
+                'desc' => ['tr' => 'Hafif, ferah ve zarif çiçeksi karaktere sahip bir beyaz şaraptır.', 'en' => 'A light, airy, and fragrant white wine with hints of elderflower and citrus.'],
+                'variations' => [
+                    ['name' => ['tr' => 'Kadeh', 'en' => 'Glass'], 'price' => 300],
+                    ['name' => ['tr' => 'Şişe', 'en' => 'Bottle'], 'price' => 950],
+                ]
+            ],
+            [
+                'tr' => 'Hayal Sauvignon Blanc', 'en' => 'Hayal Sauvignon Blanc',
+                'desc' => ['tr' => 'Yumuşak içimli ve ferahlatıcı bir beyaz şaraptır.', 'en' => 'A smooth and refreshing white wine with rich citrus and fruit aromas.'],
+                'variations' => [
+                    ['name' => ['tr' => 'Kadeh', 'en' => 'Glass'], 'price' => 400],
+                    ['name' => ['tr' => 'Şişe', 'en' => 'Bottle'], 'price' => 1300],
+                ]
+            ],
+            [
+                'tr' => 'Anfora Chardonnay', 'en' => 'Anfora Chardonnay', 'price' => 2000,
+                'desc' => ['tr' => 'Canlı, yuvarlak ve dengeli asiditeye sahip bir şaraptır.', 'en' => 'A lively, round, and well-balanced wine.']
+            ],
+            [
+                'tr' => 'Premium Sarafin Sauvignon Blanc', 'en' => 'Premium Sarafin Sauvignon Blanc', 'price' => 3000,
+                'desc' => ['tr' => 'Yumuşak içimli, meyvemsi ve dengeli yapısıyla öne çıkan seçkin bir beyaz şaraptır.', 'en' => 'A smooth, fruity, and beautifully balanced premium white wine.']
+            ],
+            [
+                'tr' => 'Lamberti Pinot Grigio Delle Venezie', 'en' => 'Lamberti Pinot Grigio Delle Venezie',
+                'desc' => ['tr' => 'Taze ve uzun bitişli bir şaraptır.', 'en' => 'Fresh and vibrant, with notes of white flowers and pear, finishing long and clean.'],
+                'variations' => [
+                    ['name' => ['tr' => 'Kadeh', 'en' => 'Glass'], 'price' => 400],
+                    ['name' => ['tr' => 'Şişe', 'en' => 'Bottle'], 'price' => 1800],
+                ]
+            ],
+            [
+                'tr' => 'Kav Narince', 'en' => 'Kav Narince', 'price' => 2200,
+                'desc' => ['tr' => 'Kendine has aromatik yapısı sayesinde tek başına içimi de oldukça keyiflidir.', 'en' => 'Its distinctive aromatic profile also makes it delightful on its own.']
+            ],
+            [
+                'tr' => 'Artı Sauvignon Blanc', 'en' => 'Artı Sauvignon Blanc', 'price' => 1900,
+                'desc' => ['tr' => 'Dengeli ve canlı asiditeye sahip bir şaraptır.', 'en' => 'Produced from carefully selected Sauvignon Blanc grapes showing fresh, balanced structure and lively acidity.']
+            ],
+            [
+                'tr' => 'DLC Sultaniye – Emir', 'en' => 'DLC Sultaniye – Emir',
+                'desc' => ['tr' => 'Narenciye ve beyaz meyve notalarıyla taze, dengeli ve keyifli bir içim sunar.', 'en' => 'Produced from a blend of Sultaniye and Emir grapes grown in the Aegean region and Cappadocia.'],
+                'variations' => [
+                    ['name' => ['tr' => 'Kadeh', 'en' => 'Glass'], 'price' => 500],
+                    ['name' => ['tr' => 'Şişe', 'en' => 'Bottle'], 'price' => 1900],
+                ]
+            ],
+        ]);
+
+        // 12. ROSE ŞARAPLAR / ROSE WINES
+        $roseWines = Category::create([
+            'parent_id' => $drinkCat->id,
+            'name' => ['en' => 'Rose Wines', 'tr' => 'Rose Şaraplar'],
+            'order_column' => 12,
+            'is_active' => true
+        ]);
+        $this->seedItems($roseWines->id, [
+            [
+                'tr' => 'Ev Şarabı', 'en' => 'House Wine',
+                'desc' => ['tr' => 'Meyvemsi aromalara sahip, ferah, yumuşak ve canlı içimli bir roze şaraptır.', 'en' => 'A refreshing, smooth, and crisp rosé wine with fruity aromas.'],
+                'variations' => [
+                    ['name' => ['tr' => 'Kadeh', 'en' => 'Glass'], 'price' => 300],
+                    ['name' => ['tr' => 'Şişe', 'en' => 'Bottle'], 'price' => 950],
+                ]
+            ],
+            [
+                'tr' => 'Verano Blush Rosé', 'en' => 'Verano Blush Rosé',
+                'desc' => ['tr' => 'Canlı asiditesiyle aperitif olarak da ya da deniz ürünleri, tavuk ve makarna yanında ideal bir seçimdir.', 'en' => 'Crafted from rare Kalecik grapes, this rosé offers delicate floral notes with aromas of cherry, raspberry, and ripe fruits.'],
+                'variations' => [
+                    ['name' => ['tr' => 'Kadeh', 'en' => 'Glass'], 'price' => 450],
+                    ['name' => ['tr' => 'Şişe', 'en' => 'Bottle'], 'price' => 1800],
+                ]
+            ],
+            [
+                'tr' => 'Kızılaalan', 'en' => 'Kızılaalan',
+                'desc' => ['tr' => 'Meyvemsi ve zarif bir yapıya sahiptir.', 'en' => 'Balık ve makarna çeşitleriyle iyi uyum sağlar.'],
+                'variations' => [
+                    ['name' => ['tr' => 'Kadeh', 'en' => 'Glass'], 'price' => 500],
+                    ['name' => ['tr' => 'Şişe', 'en' => 'Bottle'], 'price' => 2100],
+                ]
+            ],
+            [
+                'tr' => 'Hayal Rosé', 'en' => 'Hayal Rosé',
+                'desc' => ['tr' => 'Hafif, ferah ve meyvemsi karakteriyle gün boyu keyifle tercih edilebilecek zarif bir roze şaraptır.', 'en' => 'A light, refreshing, and fruity rosé wine that is elegant and easy to enjoy throughout the day.'],
+                'variations' => [
+                    ['name' => ['tr' => 'Kadeh', 'en' => 'Glass'], 'price' => 400],
+                    ['name' => ['tr' => 'Şişe', 'en' => 'Bottle'], 'price' => 1300],
+                ]
+            ],
+        ]);
+
+        // 13. RAKILAR / TURKISH RAKIS
+        $rakis = Category::create([
+            'parent_id' => $drinkCat->id,
+            'name' => ['en' => 'Turkish Rakis', 'tr' => 'Rakılar'],
+            'order_column' => 13,
+            'is_active' => true
+        ]);
         $this->seedItems($rakis->id, [
-            ['tr' => 'YENİ RAKI YENİ SERİ TEK', 'en' => 'YENİ RAKI YENİ SERİ SINGLE', 'price' => 300],
-            ['tr' => 'YENİ RAKI YENİ SERİ DUBLE', 'en' => 'YENİ RAKI YENİ SERİ DOUBLE', 'price' => 450],
-            ['tr' => 'YENİ RAKI YENİ SERİ 20 CL', 'en' => 'YENİ RAKI YENİ SERİ 20 CL', 'price' => 1100],
-            ['tr' => 'YENİ RAKI YENİ SERİ 35 CL', 'en' => 'YENİ RAKI YENİ SERİ 35 CL', 'price' => 1500],
-            ['tr' => 'YENİ RAKI YENİ SERİ 50 CL', 'en' => 'YENİ RAKI YENİ SERİ 50 CL', 'price' => 2200],
-            ['tr' => 'YENİ RAKI YENİ SERİ 70 CL', 'en' => 'YENİ RAKI YENİ SERİ 70 CL', 'price' => 2750],
-
-            ['tr' => 'TEKİRDAĞ ALTIN SERİ TEK', 'en' => 'TEKİRDAĞ ALTIN SERİ SINGLE', 'price' => 350],
-            ['tr' => 'TEKİRDAĞ ALTIN SERİ DUBLE', 'en' => 'TEKİRDAĞ ALTIN SERİ DOUBLE', 'price' => 500],
-            ['tr' => 'TEKİRDAĞ ALTIN SERİ 20 CL', 'en' => 'TEKİRDAĞ ALTIN SERİ 20 CL', 'price' => 1300],
-            ['tr' => 'TEKİRDAĞ ALTIN SERİ 35 CL', 'en' => 'TEKİRDAĞ ALTIN SERİ 35 CL', 'price' => 1900],
-            ['tr' => 'TEKİRDAĞ ALTIN SERİ 50 CL', 'en' => 'TEKİRDAĞ ALTIN SERİ 50 CL', 'price' => 2500],
-            ['tr' => 'TEKİRDAĞ ALTIN SERİ 70 CL', 'en' => 'TEKİRDAĞ ALTIN SERİ 70 CL', 'price' => 3300],
-
-            ['tr' => 'TEKİRDAĞ RAKISI GÖBEK TEK', 'en' => 'TEKİRDAĞ GÖBEK RAKISI SINGLE', 'price' => 350],
-            ['tr' => 'TEKİRDAĞ RAKISI GÖBEK DUBLE', 'en' => 'TEKİRDAĞ GÖBEK RAKISI DOUBLE', 'price' => 500],
-            ['tr' => 'TEKİRDAĞ RAKISI GÖBEK 35 CL', 'en' => 'TEKİRDAĞ GÖBEK RAKISI 35 CL', 'price' => 1950],
-            ['tr' => 'TEKİRDAĞ RAKISI GÖBEK 50 CL', 'en' => 'TEKİRDAĞ GÖBEK RAKISI 50 CL', 'price' => 2600],
-            ['tr' => 'TEKİRDAĞ RAKISI GÖBEK 70 CL', 'en' => 'TEKİRDAĞ GÖBEK RAKISI 70 CL', 'price' => 3500],
-
-            ['tr' => 'KULÜP RAKI DELÜKS 35 CL', 'en' => 'KULÜP RAKI DELUXE 35 CL', 'price' => 1900],
-            ['tr' => 'KULÜP RAKI DELÜKS 70 CL', 'en' => 'KULÜP RAKI DELUXE 70 CL', 'price' => 3300],
-
-            ['tr' => 'Efe Gold TEK', 'en' => 'Efe Gold SINGLE', 'price' => 350],
-            ['tr' => 'Efe Gold DUBLE', 'en' => 'Efe Gold DOUBLE', 'price' => 500],
-            ['tr' => 'Efe Gold 35 cl', 'en' => 'Efe Gold 35 cl', 'price' => 1900],
-            ['tr' => 'Efe Gold 50 cl', 'en' => 'Efe Gold 50 cl', 'price' => 2500],
-            ['tr' => 'Efe Gold 70 cl', 'en' => 'Efe Gold 70 cl', 'price' => 3300],
-
-            ['tr' => 'Beylerbeyi Göbek 35 cl', 'en' => 'Beylerbeyi Göbek 35 cl', 'price' => 2100],
-            ['tr' => 'Beylerbeyi Göbek 50 cl', 'en' => 'Beylerbeyi Göbek 50 cl', 'price' => 2800],
-            ['tr' => 'Beylerbeyi Göbek 70 cl', 'en' => 'Beylerbeyi Göbek 70 cl', 'price' => 3700],
+            [
+                'tr' => 'Yeni Rakı Yeni Seri', 'en' => 'Yeni Rakı Yeni Seri',
+                'variations' => [
+                    ['name' => ['tr' => 'Tek', 'en' => 'Single'], 'price' => 200],
+                    ['name' => ['tr' => 'Duble', 'en' => 'Double'], 'price' => 350],
+                    ['name' => ['tr' => '35 CL', 'en' => '35 CL'], 'price' => 1500],
+                    ['name' => ['tr' => '70 CL', 'en' => '70 CL'], 'price' => 2800],
+                ]
+            ],
+            [
+                'tr' => 'Tekirdağ Altın Seri', 'en' => 'Tekirdağ Altın Seri',
+                'variations' => [
+                    ['name' => ['tr' => 'Tek', 'en' => 'Single'], 'price' => 225],
+                    ['name' => ['tr' => 'Duble', 'en' => 'Double'], 'price' => 450],
+                    ['name' => ['tr' => '35 CL', 'en' => '35 CL'], 'price' => 1700],
+                    ['name' => ['tr' => '70 CL', 'en' => '70 CL'], 'price' => 3200],
+                ]
+            ],
+            [
+                'tr' => 'Beylerbeyi Göbek Rakısı', 'en' => 'Beylerbeyi Göbek Rakısı',
+                'variations' => [
+                    ['name' => ['tr' => 'Tek', 'en' => 'Single'], 'price' => 250],
+                    ['name' => ['tr' => 'Duble', 'en' => 'Double'], 'price' => 500],
+                    ['name' => ['tr' => '35 CL', 'en' => '35 CL'], 'price' => 2000],
+                    ['name' => ['tr' => '70 CL', 'en' => '70 CL'], 'price' => 3800],
+                ]
+            ],
         ]);
     }
 
-    private function seedItems($parentId, $itemsArray, $note = null)
+    private function seedItems($parentId, $itemsArray)
     {
         foreach($itemsArray as $i => $item) {
-            $desc = $item['desc'] ?? null;
-            if ($note) {
-                $trNote = is_array($note) ? ($note['tr'] ?? $note) : $note;
-                $enNote = is_array($note) ? ($note['en'] ?? $note) : $note;
-
-                $desc = [
-                    'tr' => (($desc && isset($desc['tr'])) ? $desc['tr'] . "\n" : "") . $trNote,
-                    'en' => (($desc && isset($desc['en'])) ? $desc['en'] . "\n" : "") . $enNote,
-                ];
-            }
-
             MenuItem::create([
                 'category_id' => $parentId,
                 'name' => ['en' => $item['en'], 'tr' => $item['tr']],
                 'slug' => ['en' => Str::slug($item['en']), 'tr' => Str::slug($item['tr'])],
-                'price' => $item['price'],
-                'description' => $desc,
+                'price' => $item['price'] ?? null,
+                'variations' => $item['variations'] ?? null,
+                'description' => $item['desc'] ?? null,
                 'is_active' => true,
                 'order_column' => $i + 1,
             ]);

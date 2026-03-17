@@ -56,7 +56,24 @@ class MenuItemResource extends Resource
                             ->label('Fiyat')
                             ->numeric()
                             ->prefix('₺')
-                            ->required(),
+                            ->required(fn (Forms\Get $get) => empty($get('variations'))),
+                        
+                        Forms\Components\Repeater::make('variations')
+                            ->label('Varyasyonlar (Örn: Kadeh/Şişe)')
+                            ->schema([
+                                Forms\Components\TextInput::make('name')
+                                    ->label('Varyasyon Adı')
+                                    ->required(),
+                                Forms\Components\TextInput::make('price')
+                                    ->label('Fiyat')
+                                    ->numeric()
+                                    ->prefix('₺')
+                                    ->required(),
+                            ])
+                            ->columns(['default' => 2])
+                            ->columnSpanFull()
+                            ->itemLabel(fn (array $state): ?string => $state['name'][app()->getLocale()] ?? $state['name']['tr'] ?? $state['name']['en'] ?? null),
+
                         Forms\Components\TextInput::make('likes_count')
                             ->numeric()
                             ->default(0)

@@ -203,9 +203,6 @@
                                 
 
                                 $name = e($item->name);
-                                $formattedPriceHtml = $this->formatPrice($item->price);
-                                $description = $hasDescription ? e($item->description) : '';
-                                
                                 // Image & Modal Trigger
                                 $favicon = \App\Models\Setting::getValue('favicon');
                                 $faviconUrl = $favicon ? (str_starts_with($favicon, 'http') ? $favicon : \Illuminate\Support\Facades\Storage::url($favicon)) : null;
@@ -221,6 +218,7 @@
                                            </div>');
 
                                 // Description
+                                $description = $hasDescription ? e($item->description) : '';
                                 $descHtml = $hasDescription 
                                     ? "<p style=\"font-size:11px;color:#8b8b8b;font-style:italic;line-height:1.5;margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-weight:300;\">{$description}</p>"
                                     : '';
@@ -297,6 +295,28 @@
                                     <span x-show=\"likesCount > 0\" x-text=\"likesCount\" x-cloak class=\"text-white text-xs font-medium drop-shadow-md ml-1 mt-px inline-block transition-all\" :class=\"pop ? 'animate-heart-pop' : ''\"></span>
                                 </button>";
 
+                                // Price or Variations
+                                $priceOrVariationsHtml = '';
+                                if (!empty($item->variations)) {
+                                    $priceOrVariationsHtml = '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;margin-top:2px;">';
+                                    foreach ($item->variations as $var) {
+                                        $varName = is_array($var['name']) ? ($var['name'][app()->getLocale()] ?? $var['name']['tr'] ?? $var['name']['en'] ?? '') : $var['name'];
+                                        $varPrice = $this->formatPrice($var['price']);
+                                        $priceOrVariationsHtml .= "
+                                            <div style=\"display:flex;align-items:center;gap:8px;white-space:nowrap;\">
+                                                <span style=\"font-size:10px;color:#8b8b8b;text-transform:uppercase;letter-spacing:0.02em;\">{$varName}</span>
+                                                <div style=\"display:flex;align-items:baseline;gap:2px;\">{$varPrice}</div>
+                                            </div>";
+                                    }
+                                    $priceOrVariationsHtml .= '</div>';
+                                } else {
+                                    $formattedPriceHtml = $this->formatPrice($item->price);
+                                    $priceOrVariationsHtml = "
+                                        <div wire:key=\"price-{$item->id}-{$this->currency}\" style=\"display:flex;align-items:baseline;gap:2px;flex-shrink:0;\">
+                                            {$formattedPriceHtml}
+                                        </div>";
+                                }
+
                                 return "
                                 <div wire:key=\"menu-item-{$item->id}\" class=\"gsap-fade-in\" style=\"background:white;border-radius:14px;overflow:hidden;transition:all 0.4s cubic-bezier(0.4,0,0.2,1);border:1px solid rgba(0,0,0,0.05);box-shadow:0 1px 3px rgba(0,0,0,0.04),0 4px 12px rgba(0,0,0,0.03);position:relative;height:160px;\" onmouseenter=\"this.style.boxShadow='0 8px 30px rgba(91,110,78,0.15)';this.style.transform='translateY(-2px)';this.style.borderColor='rgba(92,100,72,0.15)';var img=this.querySelector('img');if(img)img.style.transform='scale(1.08)'\" onmouseleave=\"this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04),0 4px 12px rgba(0,0,0,0.03)';this.style.transform='translateY(0)';this.style.borderColor='rgba(0,0,0,0.05)';var img=this.querySelector('img');if(img)img.style.transform='scale(1)'\">
                                     <div style=\"display:flex;flex-direction:row;height:100%\">
@@ -310,9 +330,7 @@
                                         <div style=\"padding:14px 18px;display:flex;flex-direction:column;flex-grow:1;min-width:0;gap:4px;height:100%;\">
                                             <div style=\"display:flex;justify-content:space-between;align-items:flex-start;gap:16px;\">
                                                 <h3 style=\"font-size:15px;font-weight:600;color:#2c2a26;text-transform:uppercase;letter-spacing:0.06em;line-height:1.35;margin:0;\">{$name}</h3>
-                                                <div wire:key=\"price-{$item->id}-{$this->currency}\" style=\"display:flex;align-items:baseline;gap:2px;flex-shrink:0;\">
-                                                    {$formattedPriceHtml}
-                                                </div>
+                                                {$priceOrVariationsHtml}
                                             </div>
                                             {$descHtml}
                                             {$badgesRow}

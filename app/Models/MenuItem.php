@@ -20,6 +20,7 @@ class MenuItem extends Model
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
         'is_vegan' => 'boolean',
+        'variations' => 'array',
     ];
 
     public function category()
