@@ -38,7 +38,7 @@
             @php
                 $settingHeroImages = \App\Models\Setting::getValue('hero_images', []);
                 if (!is_array($settingHeroImages)) $settingHeroImages = [$settingHeroImages];
-                $fallbackImage = !empty($settingHeroImages) ? $settingHeroImages[0] : asset('storage/gallery/DJI_0834-Edit-scaled.webp');
+                $fallbackImage = !empty($settingHeroImages) ? $settingHeroImages[0] : asset('images/gallery/DJI_0834-Edit-scaled.jpg');
             @endphp
             <div class="absolute inset-0 z-0">
                 <img src="{{ $fallbackImage }}" class="w-full h-full object-cover origin-center scale-105" alt="Pruva Hero">

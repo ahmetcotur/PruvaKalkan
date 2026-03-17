@@ -198,37 +198,37 @@ class SettingSeeder extends Seeder
             // Dynamic Page Images
             [
                 'key' => 'hero_images',
-                'value' => ['tr' => ['gallery/dji_0834-edit-scaled.webp'], 'en' => ['gallery/dji_0834-edit-scaled.webp']],
+                'value' => ['tr' => ['gallery/DJI_0834-Edit-scaled.jpg'], 'en' => ['gallery/DJI_0834-Edit-scaled.jpg']],
                 'type' => 'images',
                 'group' => 'branding',
             ],
             [
                 'key' => 'story_image',
-                'value' => ['tr' => 'gallery/029a5160.webp', 'en' => 'gallery/029a5160.webp'],
+                'value' => ['tr' => 'gallery/029A5160.jpg', 'en' => 'gallery/029A5160.jpg'],
                 'type' => 'image',
                 'group' => 'branding',
             ],
             [
                 'key' => 'menu_restaurant_image',
-                'value' => ['tr' => 'gallery/029a0989.webp', 'en' => 'gallery/029a0989.webp'],
+                'value' => ['tr' => 'gallery/029A0989.jpg', 'en' => 'gallery/029A0989.jpg'],
                 'type' => 'image',
                 'group' => 'branding',
             ],
             [
                 'key' => 'menu_snacks_image',
-                'value' => ['tr' => 'gallery/029a0982.webp', 'en' => 'gallery/029a0982.webp'],
+                'value' => ['tr' => 'gallery/029A0982.jpg', 'en' => 'gallery/029A0982.jpg'],
                 'type' => 'image',
                 'group' => 'branding',
             ],
             [
                 'key' => 'menu_drinks_image',
-                'value' => ['tr' => 'gallery/029a5151.webp', 'en' => 'gallery/029a5151.webp'],
+                'value' => ['tr' => 'gallery/029A5151.jpg', 'en' => 'gallery/029A5151.jpg'],
                 'type' => 'image',
                 'group' => 'branding',
             ],
             [
                 'key' => 'parallax_image',
-                'value' => ['tr' => 'gallery/029A5379.webp', 'en' => 'gallery/029A5379.webp'],
+                'value' => ['tr' => 'gallery/029A5379.jpg', 'en' => 'gallery/029A5379.jpg'],
                 'type' => 'image',
                 'group' => 'branding',
             ],
