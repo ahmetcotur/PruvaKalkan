@@ -15,7 +15,7 @@ class OurStorySettingsSeeder extends Seeder
                 'key' => 'our_story_hero_image',
                 'type' => 'image',
                 'group' => 'our_story',
-                'value' => 'gallery/DJI_0834-Edit-scaled.webp',
+                'value' => 'gallery/DJI_0834-Edit-scaled.jpg',
             ],
             [
                 'key' => 'our_story_hero_title',
@@ -59,7 +59,7 @@ class OurStorySettingsSeeder extends Seeder
                 'key' => 'our_story_roots_image',
                 'type' => 'image',
                 'group' => 'our_story',
-                'value' => 'gallery/029A5168.webp',
+                'value' => 'gallery/029A5168.jpg',
             ],
 
             // Sea
@@ -85,7 +85,7 @@ class OurStorySettingsSeeder extends Seeder
                 'key' => 'our_story_sea_image',
                 'type' => 'image',
                 'group' => 'our_story',
-                'value' => 'gallery/029A5151.webp',
+                'value' => 'gallery/029A5151.jpg',
             ],
 
             // Flame
@@ -111,7 +111,7 @@ class OurStorySettingsSeeder extends Seeder
                 'key' => 'our_story_flame_image',
                 'type' => 'image',
                 'group' => 'our_story',
-                'value' => 'gallery/029A0982.webp',
+                'value' => 'gallery/029A0982.jpg',
             ],
 
             // Gathering
@@ -137,7 +137,7 @@ class OurStorySettingsSeeder extends Seeder
                 'key' => 'our_story_gathering_image',
                 'type' => 'image',
                 'group' => 'our_story',
-                'value' => 'gallery/029A5379.webp',
+                'value' => 'gallery/029A5379.jpg',
             ],
 
             // Conclusion

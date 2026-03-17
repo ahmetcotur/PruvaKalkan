@@ -10,6 +10,7 @@ class GallerySeeder extends Seeder
 {
     public function run(): void
     {
+        \App\Models\GalleryImage::query()->delete();
         $files = File::files(public_path('images/gallery'));
         $order = 1;
 
