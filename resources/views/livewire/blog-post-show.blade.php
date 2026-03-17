@@ -46,6 +46,20 @@
         <div class="gsap-fade-in prose prose-lg md:prose-xl prose-stone max-w-none prose-headings:font-light prose-headings:text-brand-dark prose-a:text-brand-olive hover:prose-a:text-brand-dark prose-img:rounded-3xl prose-img:shadow-sm">
             {!! $post->content !!}
         </div>
+
+        @if($post->map_iframe)
+            <div class="gsap-fade-in mt-16 rounded-3xl overflow-hidden shadow-sm h-[450px] w-full border border-brand-dark/10">
+                {!! $post->map_iframe !!}
+            </div>
+            <style>
+                .mt-16 iframe {
+                    width: 100% !important;
+                    height: 100% !important;
+                    border: 0 !important;
+                }
+            </style>
+        @endif
+        
         
     </article>
 </div>

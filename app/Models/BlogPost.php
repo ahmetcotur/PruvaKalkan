@@ -13,7 +13,7 @@ class BlogPost extends Model
 
     protected $guarded = [];
 
-    public $translatable = ['title', 'slug', 'description', 'content'];
+    public $translatable = ['title', 'slug', 'description', 'content', 'map_iframe'];
 
     protected $casts = [
         'is_active' => 'boolean',

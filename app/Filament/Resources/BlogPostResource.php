@@ -46,6 +46,11 @@ class BlogPostResource extends Resource
                             ->label('İçerik')
                             ->required()
                             ->columnSpanFull(),
+                        Forms\Components\Textarea::make('map_iframe')
+                            ->label('Harita Iframe')
+                            ->placeholder('<iframe src="..."></iframe>')
+                            ->helperText('Google My Maps veya Google Maps iframe kodunu buraya yapıştırın.')
+                            ->columnSpanFull(),
                     ]),
 
                 Forms\Components\Section::make('Meta & Durum')

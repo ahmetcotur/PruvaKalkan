@@ -26,7 +26,7 @@
                     
                     <div>
                         <h3 class="text-brand-olive uppercase tracking-[0.2em] text-sm font-semibold mb-3">{{ __('Hours') }}</h3>
-                        <p class="text-gray-600 font-light text-lg">{{ __('Everyday') }}: <span class="font-medium">19:00 - 00:00</span></p>
+                        <p class="text-gray-600 font-light text-lg">{{ App\Models\Setting::getValue('opening_days', __('Everyday')) }}: <span class="font-medium">{{ App\Models\Setting::getValue('opening_hours', '19:00 - 00:00') }}</span></p>
                     </div>
                     
                     <div>

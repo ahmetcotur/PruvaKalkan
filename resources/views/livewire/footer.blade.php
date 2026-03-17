@@ -56,8 +56,8 @@
             <div class="col-span-1">
                 <h3 class="text-brand-olive uppercase tracking-widest text-sm font-semibold mb-6">{{ __('Hours') }}</h3>
                 <div class="text-sm text-gray-600 font-light space-y-2">
-                    <p>{{ __('Everyday') }}</p>
-                    <p class="text-brand-olive text-lg font-normal tracking-wider mt-1">19:00 &mdash; 00:00</p>
+                    <p>{{ App\Models\Setting::getValue('opening_days', __('Everyday')) }}</p>
+                    <p class="text-brand-olive text-lg font-normal tracking-wider mt-1">{{ App\Models\Setting::getValue('opening_hours', '19:00 — 00:00') }}</p>
                 </div>
             </div>
         </div>
