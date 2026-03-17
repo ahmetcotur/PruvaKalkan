@@ -12,13 +12,16 @@ document.addEventListener('livewire:navigated', () => {
     ScrollTrigger.refresh();
 
     // Example fade-in for elements with .gsap-fade-in class
-    gsap.fromTo('.gsap-fade-in',
-        { autoAlpha: 0, y: 30 },
-        {
-            autoAlpha: 1, y: 0, duration: 1, stagger: 0.1, scrollTrigger: {
-                trigger: '.gsap-fade-in',
-                start: 'top 80%',
+    const fadeInElements = document.querySelectorAll('.gsap-fade-in');
+    if (fadeInElements.length > 0) {
+        gsap.fromTo('.gsap-fade-in',
+            { autoAlpha: 0, y: 30 },
+            {
+                autoAlpha: 1, y: 0, duration: 1, stagger: 0.1, scrollTrigger: {
+                    trigger: '.gsap-fade-in',
+                    start: 'top 80%',
+                }
             }
-        }
-    );
+        );
+    }
 });
