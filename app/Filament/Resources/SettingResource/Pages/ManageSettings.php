@@ -206,10 +206,16 @@ class ManageSettings extends Page implements HasForms
                 // If it's translatable, the value is an array ['tr' => ..., 'en' => ...]
                 if (is_array($value)) {
                     foreach ($value as $lang => $val) {
+                        if ($setting->type === 'image' || $setting->type === 'images') {
+                            $val = \App\Services\ImageService::process($val, 'settings');
+                        }
                         $setting->setTranslation('value', $lang, $val);
                     }
                 }
             } else {
+                if ($setting->type === 'image' || $setting->type === 'images') {
+                    $value = \App\Services\ImageService::process($value, 'settings');
+                }
                 // If it's global, we save it for both locales to satisfy Spatie
                 $setting->setTranslation('value', 'tr', $value);
                 $setting->setTranslation('value', 'en', $value);
