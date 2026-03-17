@@ -9,4 +9,4 @@ cmds = ["composer install --no-dev --no-interaction --prefer-dist --optimize-aut
 cmds = ["npm run build"]
 
 [start]
-cmd = "php artisan optimize:clear && php artisan serve --host=0.0.0.0 --port=3000"
+cmd = "php artisan optimize:clear && php -d upload_max_filesize=50M -d post_max_size=50M artisan serve --host=0.0.0.0 --port=3000"
